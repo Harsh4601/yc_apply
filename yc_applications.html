@@ -41,7 +41,13 @@
   .tab.active { background:var(--ink); color:#fff; border-color:var(--ink); }
   .empty { color:var(--muted); font-size:14px; text-align:center; padding:32px 16px; background:var(--card); border:1px dashed var(--line); border-radius:12px; }
   footer { color:var(--muted); font-size:12px; text-align:center; margin-top:24px; }
+  .resumebar { display:flex; gap:12px; align-items:center; flex-wrap:wrap; background:#fff7f0; border:1px solid #ffd9bd; border-radius:10px; padding:12px 16px; margin-bottom:18px; }
+  .upload { background:var(--accent); color:#fff; border-radius:8px; padding:8px 14px; font-size:14px; font-weight:600; cursor:pointer; }
+  .upload:hover { opacity:.9; }
+  .rstatus { font-size:13px; color:#6b4a2f; flex:1 1 240px; }
+  .linkbtn { background:none; border:none; color:var(--accent); font:inherit; font-size:13px; font-weight:600; cursor:pointer; text-decoration:underline; padding:0; }
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 </head>
 <body>
 <div class="wrap">
@@ -50,6 +56,13 @@
   <div class="bar">
     <div><b id="cdone">0</b>/10 applied</div>
     <div class="sub" style="margin:0">Filters: US · team 1–100 · isHiring · recent batches (W25–W26). Checkboxes &amp; notes auto-save in this browser.</div>
+  </div>
+  <div class="resumebar">
+    <label class="upload">📄 Upload résumé (PDF)
+      <input type="file" id="resume" accept="application/pdf" hidden>
+    </label>
+    <span id="rstatus" class="rstatus">Optional: upload a résumé to fetch live YC matches ranked to it (same filters). Default below is the curated set.</span>
+    <button id="reset-btn" class="linkbtn" hidden>↩ back to curated picks</button>
   </div>
   <div class="tabs">
     <button class="tab active" data-tab="todo">To Apply (<span id="ntodo">10</span>)</button>
@@ -62,7 +75,7 @@
 </div>
 
 <script>
-const JOBS = [
+const CURATED = [
 {
   id:"manufact",
   name:"Manufact (formerly mcp-use)",
@@ -165,6 +178,8 @@ const JOBS = [
 }
 ];
 
+let JOBS = CURATED.slice();   // current list shown (curated by default, or résumé matches)
+
 const KEY = "yc_tracker_v1";
 // State is persisted to a JSON file on disk via the local server (/api/state).
 // localStorage is kept only as an offline fallback if the server isn't running.
@@ -208,38 +223,47 @@ function updateViews(){
     t.classList.toggle("active", t.dataset.tab === activeTab));
 }
 
-JOBS.forEach((j, i) => {
-  const s = state[j.id] || {};
-  const card = document.createElement("div");
-  card.className = "card" + (s.applied ? " done" : "");
-  card.id = "card-" + j.id;
-  card.innerHTML = `
-    <div class="top">
-      <div>
-        <p class="name"><span class="num">${i+1}.</span>${j.name}</p>
-        <p class="one">${j.one}</p>
+function esc(x){ return String(x==null?"":x).replace(/</g,"&lt;"); }
+
+function renderJobs(list){
+  JOBS = list;
+  root.innerHTML = "";
+  appliedRoot.innerHTML = "";
+  list.forEach((j, i) => {
+    const s = state[j.id] || {};
+    const card = document.createElement("div");
+    card.className = "card" + (s.applied ? " done" : "");
+    card.id = "card-" + j.id;
+    card.innerHTML = `
+      <div class="top">
+        <div>
+          <p class="name"><span class="num">${i+1}.</span>${esc(j.name)}</p>
+          <p class="one">${esc(j.one)}</p>
+        </div>
       </div>
-    </div>
-    <div class="tags">
-      <span class="tag">${j.batch}</span>
-      <span class="tag">Team ~${j.team}</span>
-      <span class="tag">${j.loc}</span>
-    </div>
-    <div class="role">${j.role}</div>
-    <div class="why"><b>Why you fit:</b> ${j.why}</div>
-    <div class="links"><a href="${j.url}" target="_blank" rel="noopener">Open role &amp; apply ↗</a></div>
-    <label class="msglbl">Personalized message (paste into the application)</label>
-    <textarea class="msg" id="msg-${j.id}" readonly>${j.msg.replace(/</g,"&lt;")}</textarea>
-    <button class="copy" data-id="${j.id}">Copy message</button>
-    <div class="track">
-      <label class="chk"><input type="checkbox" data-id="${j.id}" ${s.applied ? "checked":""}> Applied</label>
-      <div class="reason">
-        <label class="msglbl" style="margin-top:8px">If not applied — why? (notes save automatically)</label>
-        <textarea data-reason="${j.id}" placeholder="e.g. role closed, needs 3+ yrs, no sponsorship, not a fit...">${(s.reason||"").replace(/</g,"&lt;")}</textarea>
+      <div class="tags">
+        <span class="tag">${esc(j.batch)}</span>
+        <span class="tag">Team ~${esc(j.team)}</span>
+        <span class="tag">${esc(j.loc)}</span>
       </div>
-    </div>`;
-  root.appendChild(card);
-});
+      <div class="role">${esc(j.role)}</div>
+      <div class="why"><b>Why you fit:</b> ${esc(j.why)}</div>
+      <div class="links"><a href="${esc(j.url)}" target="_blank" rel="noopener">Open role &amp; apply ↗</a></div>
+      <label class="msglbl">Personalized message (paste into the application)</label>
+      <textarea class="msg" id="msg-${j.id}" readonly>${esc(j.msg)}</textarea>
+      <button class="copy" data-id="${j.id}">Copy message</button>
+      <div class="track">
+        <label class="chk"><input type="checkbox" data-id="${j.id}" ${s.applied ? "checked":""}> Applied</label>
+        <div class="reason">
+          <label class="msglbl" style="margin-top:8px">If not applied — why? (notes save automatically)</label>
+          <textarea data-reason="${j.id}" placeholder="e.g. role closed, needs 3+ yrs, no sponsorship, not a fit...">${esc(s.reason||"")}</textarea>
+        </div>
+      </div>`;
+    root.appendChild(card);
+  });
+  list.forEach(j => placeCard(j.id));
+  updateViews();
+}
 
 document.addEventListener("change", e => {
   if (e.target.matches('input[type="checkbox"][data-id]')) {
@@ -273,26 +297,151 @@ document.addEventListener("click", e => {
   }
 });
 
-// Initial placement: route any already-applied cards into the Applied tab.
-JOBS.forEach(j => placeCard(j.id));
-updateViews();
+// Initial render of the curated set.
+renderJobs(CURATED);
 
-// On load, pull the authoritative state from the on-disk ledger and sync the UI.
+// On load, pull the authoritative state from the on-disk ledger, then re-render.
 fetch("/api/state").then(r => r.ok ? r.json() : null).then(server => {
-  if (!server) return;
-  state = server;
-  localStorage.setItem(KEY, JSON.stringify(state));
-  JOBS.forEach(j => {
-    const s = state[j.id] || {};
-    const cb = document.querySelector('input[type="checkbox"][data-id="'+j.id+'"]');
-    const rs = document.querySelector('textarea[data-reason="'+j.id+'"]');
-    if (cb) cb.checked = !!s.applied;
-    if (rs) rs.value = s.reason || "";
-    document.getElementById("card-"+j.id).classList.toggle("done", !!s.applied);
-    placeCard(j.id);
-  });
-  updateViews();
+  if (server) { state = server; localStorage.setItem(KEY, JSON.stringify(state)); renderJobs(JOBS); }
 }).catch(() => {/* offline: keep localStorage state */});
+
+/* ====================================================================
+   Résumé upload -> live YC matching. Same filter combination as the
+   curated list: US region, team 1-100, isHiring, recent batches.
+   All client-side: parse PDF (pdf.js), fetch YC hiring data, exclude
+   companies already proposed, score by résumé-skill overlap, take 10.
+   ==================================================================== */
+
+const RECENT_BATCHES = new Set(["Winter 2026","Fall 2025","Summer 2025","Spring 2025","Winter 2025"]);
+const SKILL_KEYWORDS = [
+  "python","golang"," go ","typescript","javascript","c++","rust","java","bash","shell",
+  "fastapi","django","flask","node","react","next.js","rest","graphql",
+  "rag","retrieval","vector","embedding","chromadb","pinecone","llm","gpt","claude","openai","groq","prompt","whisper",
+  "agent","multi-agent","mcp","langchain","orchestrat",
+  "aws","gcp","azure","docker","kubernetes","k8s","terraform","fargate","lambda","s3","sqs","kafka","spark","airflow","etl",
+  "postgres","sql","mongodb","mysql","redis","elasticsearch","sqlite","database",
+  "distributed","consensus","paxos","raft","2pc","sharding","scalab","concurren",
+  "ci/cd","jenkins","github actions","observability","datadog","grafana","prometheus","monitoring",
+  "machine learning","deep learning","reinforcement learning","pytorch","tensorflow","ml ","nlp","computer vision",
+  "api","backend","full-stack","fullstack","infrastructure","devops","sre","testing","cypress","automation",
+  "artificial intelligence"," ai "
+];
+const rstatus = document.getElementById("rstatus");
+const setStatus = m => { rstatus.textContent = m; };
+
+let HIRING_CACHE = null;
+async function loadHiring(){
+  if (HIRING_CACHE) return HIRING_CACHE;
+  const r = await fetch("https://yc-oss.github.io/api/companies/hiring.json");
+  HIRING_CACHE = await r.json();
+  return HIRING_CACHE;
+}
+async function loadExclusions(){
+  try { const r = await fetch("companies_master.json"); const d = await r.json();
+        return new Set((d.proposed||[]).map(x => x.slug)); }
+  catch (e) { return new Set(); }
+}
+
+async function parsePdf(file){
+  pdfjsLib.GlobalWorkerOptions.workerSrc =
+    "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+  const buf = await file.arrayBuffer();
+  const pdf = await pdfjsLib.getDocument({data: buf}).promise;
+  let text = "";
+  for (let p = 1; p <= pdf.numPages; p++){
+    const page = await pdf.getPage(p);
+    const c = await page.getTextContent();
+    text += c.items.map(i => i.str).join(" ") + "\n";
+  }
+  return text;
+}
+
+function extractSkills(text){
+  const t = (" " + text + " ").toLowerCase();
+  const found = [];
+  SKILL_KEYWORDS.forEach(k => { if (t.includes(k) && !found.includes(k.trim())) found.push(k.trim()); });
+  return found;
+}
+function extractName(text){
+  const lines = text.split("\n").map(l => l.trim()).filter(Boolean);
+  for (const l of lines.slice(0, 4)){
+    if (/^[A-Za-z][A-Za-z .'-]{2,38}$/.test(l) && l.split(/\s+/).length <= 4 && !/resume|curriculum|vitae/i.test(l))
+      return l.replace(/\s+/g, " ");
+  }
+  return "";
+}
+function hay(c){
+  return ((c.one_liner||"") + " " + (c.long_description||"") + " " +
+          (c.industries||[]).join(" ") + " " + (c.tags||[]).join(" ")).toLowerCase();
+}
+function scoreCompany(c, skills){
+  const h = hay(c);
+  let s = 0;
+  skills.forEach(k => { if (h.includes(k)) s += 1; });
+  ["ai","developer tools","engineering","infrastructure","data","b2b","saas","analytics"]
+    .forEach(k => { if (h.includes(k)) s += 0.4; });
+  return s;
+}
+function buildMessage(c, matched, name){
+  const sk = matched.length ? matched.slice(0,3).join(", ") : "AI and software engineering";
+  const focus = (c.one_liner || "what you're building").replace(/\.+$/,"");
+  return `Hi ${c.name} team,\n\n${focus} lines up closely with what I work on. My strongest areas are ${sk}, which map directly to the problems you're tackling.\n\nI'd love to contribute as an AI or software engineer on your team. I'm happy to share code and walk through relevant projects, and I can move fast on early, ambiguous work.\n\nBest,\n${name || "[Your name]"}`;
+}
+function toJob(c, skills, name){
+  const h = hay(c);
+  const matched = skills.filter(k => h.includes(k));
+  return {
+    id: c.slug, name: c.name, one: c.one_liner || "",
+    batch: c.batch, team: c.team_size, loc: c.all_locations || "United States",
+    role: "View open roles on YC ↗",
+    url: "https://www.ycombinator.com/companies/" + c.slug + "/jobs",
+    why: matched.length ? ("Matched on " + matched.slice(0,5).join(", ") + ".") : "General AI / software fit.",
+    msg: buildMessage(c, matched, name)
+  };
+}
+
+async function matchFromResume(file){
+  try {
+    setStatus("Reading " + file.name + " …");
+    const text = await parsePdf(file);
+    const skills = extractSkills(text);
+    const name = extractName(text);
+    setStatus("Fetching live YC hiring data …");
+    const [companies, excluded] = await Promise.all([loadHiring(), loadExclusions()]);
+    const matches = companies
+      .filter(c => c.isHiring
+        && (c.regions||[]).includes("United States of America")
+        && c.team_size >= 1 && c.team_size <= 100
+        && RECENT_BATCHES.has(c.batch)
+        && !excluded.has(c.slug))
+      .map(c => ({ c, score: scoreCompany(c, skills) }))
+      .sort((a,b) => b.score - a.score)
+      .slice(0, 10)
+      .map(({c}) => toJob(c, skills, name));
+
+    if (!matches.length){ setStatus("No matches found with the current filters. Showing curated picks."); return; }
+    renderJobs(matches);
+    activeTab = "todo"; updateViews();
+    document.getElementById("reset-btn").hidden = false;
+    setStatus((name ? name + " — " : "") + matches.length + " live matches"
+      + (skills.length ? " · detected: " + skills.slice(0,8).join(", ") : "")
+      + ". Messages are skill-based drafts — personalize before sending.");
+  } catch (err) {
+    console.error(err);
+    setStatus("Couldn't process that PDF (" + (err.message||err) + "). The curated picks are still shown.");
+  }
+}
+
+document.getElementById("resume").addEventListener("change", e => {
+  const f = e.target.files && e.target.files[0];
+  if (f) matchFromResume(f);
+});
+document.getElementById("reset-btn").addEventListener("click", () => {
+  renderJobs(CURATED);
+  document.getElementById("reset-btn").hidden = true;
+  setStatus("Showing the curated set. Upload a résumé to fetch live YC matches.");
+  document.getElementById("resume").value = "";
+});
 </script>
 </body>
 </html>

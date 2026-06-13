@@ -46,7 +46,15 @@ class Handler(BaseHTTPRequestHandler):
         elif self.path == "/api/state":
             self._send(200, json.dumps(load_data()))
         else:
-            self._send(404, json.dumps({"error": "not found"}))
+            # Serve other static files from this directory (e.g. companies_master.json).
+            rel = self.path.lstrip("/").split("?")[0]
+            safe = os.path.normpath(os.path.join(HERE, rel))
+            if safe.startswith(HERE) and os.path.isfile(safe):
+                ctype = "application/json" if safe.endswith(".json") else "text/plain"
+                with open(safe, "rb") as f:
+                    self._send(200, f.read(), ctype)
+            else:
+                self._send(404, json.dumps({"error": "not found"}))
 
     def do_POST(self):
         if self.path == "/api/state":
