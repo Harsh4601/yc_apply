@@ -1,0 +1,4 @@
+tracker_data.json
+*.log
+.vercel
+node_modules

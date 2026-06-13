@@ -1,0 +1,15 @@
+{
+  "description": "Master ledger of every YC company already proposed to Harsh. Future fetches must EXCLUDE every slug listed here so the same company is never suggested twice.",
+  "proposed": [
+    { "slug": "manufact",     "name": "Manufact (mcp-use)", "batch": "Summer 2025", "role": "Software Engineer (Founding Team)",      "proposed_on": "2026-06-13" },
+    { "slug": "dedalus-labs", "name": "Dedalus Labs",       "batch": "Summer 2025", "role": "Distributed Systems Engineer",          "proposed_on": "2026-06-13" },
+    { "slug": "sixtyfour",    "name": "Sixtyfour",          "batch": "Spring 2025", "role": "AI Engineer",                           "proposed_on": "2026-06-13" },
+    { "slug": "browser-use",  "name": "Browser Use",        "batch": "Winter 2025", "role": "Software Engineer",                     "proposed_on": "2026-06-13" },
+    { "slug": "osmosis",      "name": "Osmosis",            "batch": "Winter 2025", "role": "Machine Learning Engineer",             "proposed_on": "2026-06-13" },
+    { "slug": "luminal",      "name": "Luminal",            "batch": "Summer 2025", "role": "Cloud Inference Engineer",              "proposed_on": "2026-06-13" },
+    { "slug": "agentmail",    "name": "AgentMail",          "batch": "Summer 2025", "role": "Founding Engineer",                     "proposed_on": "2026-06-13" },
+    { "slug": "hyperspell",   "name": "Hyperspell",         "batch": "Fall 2025",   "role": "Founding AI Engineer",                  "proposed_on": "2026-06-13" },
+    { "slug": "pgdog",        "name": "PgDog",              "batch": "Spring 2025", "role": "Founding Software Engineer",            "proposed_on": "2026-06-13" },
+    { "slug": "afterquery",   "name": "AfterQuery",         "batch": "Winter 2025", "role": "Software Engineer - Applied AI/Platform","proposed_on": "2026-06-13" }
+  ]
+}

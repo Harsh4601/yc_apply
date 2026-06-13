@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YC Application Tracker — Harsh Londhekar</title>
+<style>
+  :root { --bg:#f6f6f4; --card:#fff; --ink:#1a1a1a; --muted:#6b7280; --line:#e5e7eb; --accent:#ff6600; --ok:#16a34a; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background:var(--bg); color:var(--ink); margin:0; padding:32px 16px; line-height:1.5; }
+  .wrap { max-width: 860px; margin:0 auto; }
+  h1 { font-size:24px; margin:0 0 4px; }
+  .sub { color:var(--muted); font-size:14px; margin-bottom:8px; }
+  .bar { display:flex; gap:16px; align-items:center; flex-wrap:wrap; background:var(--card); border:1px solid var(--line); border-radius:10px; padding:12px 16px; margin-bottom:24px; font-size:14px; }
+  .bar b { font-size:18px; }
+  .card { background:var(--card); border:1px solid var(--line); border-radius:12px; padding:20px; margin-bottom:18px; box-shadow:0 1px 2px rgba(0,0,0,.04); }
+  .card.done { border-color:var(--ok); background:#f4fdf7; }
+  .top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; }
+  .name { font-size:18px; font-weight:700; margin:0; }
+  .one { color:var(--muted); font-size:14px; margin:2px 0 0; }
+  .tags { margin:10px 0; display:flex; gap:6px; flex-wrap:wrap; }
+  .tag { background:#f1f1ef; border-radius:999px; padding:2px 10px; font-size:12px; color:#444; }
+  .role { font-weight:600; margin:10px 0 2px; }
+  .why { font-size:13px; color:#444; background:#fafaf8; border-left:3px solid var(--accent); padding:8px 12px; border-radius:0 6px 6px 0; margin:8px 0; }
+  .links a { display:inline-block; background:var(--accent); color:#fff; text-decoration:none; padding:8px 14px; border-radius:8px; font-size:14px; font-weight:600; }
+  .links a:hover { opacity:.9; }
+  label.msglbl { font-size:13px; font-weight:600; color:var(--muted); display:block; margin:14px 0 4px; }
+  textarea { width:100%; border:1px solid var(--line); border-radius:8px; padding:10px; font:inherit; font-size:13px; resize:vertical; background:#fff; }
+  .msg { min-height:120px; background:#fcfcfb; }
+  .copy { margin-top:6px; background:#222; color:#fff; border:none; border-radius:6px; padding:6px 12px; font-size:12px; cursor:pointer; }
+  .copy:hover { background:#000; }
+  .track { margin-top:14px; padding-top:14px; border-top:1px dashed var(--line); }
+  .chk { display:flex; align-items:center; gap:8px; font-size:14px; font-weight:600; cursor:pointer; }
+  .chk input { width:18px; height:18px; cursor:pointer; }
+  .reason { margin-top:8px; }
+  .reason textarea { min-height:46px; }
+  .num { color:var(--accent); font-weight:700; margin-right:6px; }
+  footer { color:var(--muted); font-size:12px; text-align:center; margin-top:24px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>YC Application Tracker</h1>
+  <div class="sub">Harsh Londhekar · AI / Software Engineer · MS CS, Stony Brook (May 2026) · open to OPT/STEM-OPT, new grad</div>
+  <div class="bar">
+    <div><b id="cdone">0</b>/10 applied</div>
+    <div class="sub" style="margin:0">Filters: US · team 1–100 · isHiring · recent batches (W25–W26). Checkboxes &amp; notes auto-save in this browser.</div>
+  </div>
+  <div id="cards"></div>
+  <footer>Roles verified on YC on 2026-06-13. Apply links open YC login → Work at a Startup application. Re-check listings before applying — startups close roles fast.</footer>
+</div>
+
+<script>
+const JOBS = [
+{
+  id:"manufact",
+  name:"Manufact (formerly mcp-use)",
+  one:"Open-source SDK & cloud infrastructure for MCP servers & chat apps",
+  batch:"Summer 2025", team:5, loc:"SF / Remote (US)",
+  role:"Software Engineer (Founding Team) — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/manufact/jobs",
+  why:"Direct MCP match — you built Sentinel-ES on the MCP protocol for tool orchestration.",
+  msg:`Hi Manufact team,\n\nmcp-use caught my eye because I've already built on the MCP protocol. I made Sentinel-ES, a multi-agent incident-response system where an orchestrator coordinates three autonomous agents and uses MCP for tool orchestration, with human-in-the-loop rollback approval before anything destructive runs. So your bet on MCP as core infrastructure is one I'm genuinely excited about, not just familiar with.\n\nMy background fits a founding engineer role well. I work across Python, Go, and TypeScript, build FastAPI backends, and wrote a fault-tolerant distributed system in Go using Paxos and 2PC. I just finished my MS in CS at Stony Brook, and before that I interned at Amazon and spent two years at Enphase owning automation and infra end to end.\n\nI'd love to help build the open-source SDK and cloud platform, and I'm happy to walk you through the Sentinel-ES code.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"dedalus",
+  name:"Dedalus Labs",
+  one:"MCP gateway — a single drop-in API endpoint unifying the AI agent ecosystem",
+  batch:"Summer 2025", team:10, loc:"Remote / Any",
+  role:"Distributed Systems Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/dedalus-labs/jobs",
+  why:"Distributed systems + MCP — maps to your Go Paxos/2PC project and MCP work.",
+  msg:`Hi Dedalus team,\n\nA distributed systems role on an MCP gateway is almost exactly what I want to build. For a graduate project I implemented a fault-tolerant distributed banking system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions over net/rpc, with sharding, transaction locking, and failure recovery. I then benchmarked it across a 3,000-transaction workload and tuned the commit paths for better concurrency.\n\nI've also worked directly with MCP. My Sentinel-ES project uses the MCP protocol to orchestrate autonomous agents. Pair that with my backend work in FastAPI and AWS (Fargate, SQS, Kafka), and a single reliable drop-in endpoint for the agent ecosystem is the kind of problem I'd really enjoy owning.\n\nI just finished my MS in CS at Stony Brook, and previously worked at Amazon and Enphase.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"sixtyfour",
+  name:"Sixtyfour",
+  one:"Intelligence infrastructure on people and entities",
+  batch:"Spring 2025", team:12, loc:"SF / Remote (US)",
+  role:"AI Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/sixtyfour/jobs",
+  why:"Entity intelligence = your RAG + hybrid retrieval + LLM entity-extraction work.",
+  msg:`Hi Sixtyfour team,\n\nBuilding intelligence infrastructure over people and entities lines up closely with what I've been doing. I built a RAG pipeline with section-aware document chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking for grounded, source-attributed answers. I also built a NEMSIS pipeline that pulls structured entities out of messy EMS encounter data using LLM chains and emits schema-validated output.\n\nThat's exactly the shape of work entity enrichment needs: messy inputs in, structured and attributed intelligence out. I'm comfortable across Python, FastAPI, vector databases, and the major LLM APIs (Claude, OpenAI, Groq).\n\nI just finished my MS in CS at Stony Brook and interned at Amazon before that. I'd love to help build the AI layer here.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"browseruse",
+  name:"Browser Use",
+  one:"Leading open-source web agent (50k+ GitHub stars)",
+  batch:"Winter 2025", team:7, loc:"SF, CA",
+  role:"Software Engineer — 1+ years",
+  url:"https://www.ycombinator.com/companies/browser-use/jobs",
+  why:"Open-source web agents in Python — your multi-agent + Python wheelhouse.",
+  msg:`Hi Browser Use team,\n\nBrowser Use is the kind of project I'd use even if I didn't work there. It's a genuinely great open-source web agent, and I'd love to contribute to it full time.\n\nMy work centers on agentic systems in Python. I built Sentinel-ES, a multi-agent system with three parallel autonomous agents under an orchestrator that drives incident response end to end, with MCP-based tool orchestration and human-in-the-loop guardrails. I also have a strong testing and automation instinct from my Amazon internship, where I built a Cypress and TypeScript framework that hit 85% end-to-end coverage. That matters a lot for keeping a browser agent reliable across messy real-world sites.\n\nI just finished my MS in CS at Stony Brook, and I'd be glad to open a PR to introduce myself.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"osmosis",
+  name:"Osmosis",
+  one:"Reinforcement learning / fine-tuning for AI agents",
+  batch:"Winter 2025", team:6, loc:"SF, CA",
+  role:"Machine Learning Engineer — 1+ years",
+  url:"https://www.ycombinator.com/companies/osmosis/jobs",
+  why:"RL for agents — pairs your ML coursework with hands-on agentic systems.",
+  msg:`Hi Osmosis team,\n\nReinforcement fine-tuning for agents sits right where my coursework (Machine Learning and Recent Advances in AI/ML at Stony Brook) meets my hands-on agent work. I built Sentinel-ES, a multi-agent system where autonomous agents coordinate to resolve incidents, so I've seen firsthand the gap between a model that benchmarks well and one that actually acts reliably in a loop.\n\nOn the engineering side I'm solid in Python and FastAPI, work with LLM APIs daily, and have built RAG and data pipelines that feed model workflows end to end. I also care a lot about measurement. At Enphase I built observability pipelines (Datadog into SQL, visualized in Grafana) to catch regressions early.\n\nI just finished my MS in CS and interned at Amazon. I'm genuinely excited about RL for agents.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"luminal",
+  name:"Luminal",
+  one:"Making AI run fast on any hardware",
+  batch:"Summer 2025", team:5, loc:"SF, CA",
+  role:"Cloud Inference Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/luminal/jobs",
+  why:"Inference perf/infra — maps to your AWS Fargate + latency/throughput benchmarking.",
+  msg:`Hi Luminal team,\n\nMaking inference fast is really a performance and infrastructure problem, and that's where I'm strongest. At Enphase I built an observability pipeline that ingested Datadog APM metrics into SQL and visualized latency in Grafana, and I expanded JMeter load coverage by 70% across 300+ endpoints to catch performance regressions. In my distributed systems project I benchmarked a 3,000-transaction workload, found the bottlenecks, and tuned the commit paths for throughput.\n\nI'm comfortable deploying on AWS (Fargate, S3, SQS), Docker, and Kubernetes, and I code in C++, Python, and Go. I just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to go deep on cloud inference performance.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"agentmail",
+  name:"AgentMail",
+  one:"Email inboxes built for AI agents",
+  batch:"Summer 2025", team:8, loc:"SF, CA",
+  role:"Founding Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/agentmail/jobs",
+  why:"Agent-facing backend infra — FastAPI + AWS SQS/Kafka + agents.",
+  msg:`Hi AgentMail team,\n\nInbox infrastructure for agents is a backend and messaging problem, and that's exactly the work I enjoy. At Enphase I worked with AWS CLI, Kafka, and MongoDB to inject and validate messages through an end-to-end ingestion pipeline, and I build APIs in FastAPI and Django on AWS (Fargate, S3, SQS). On the agent side, I built Sentinel-ES, a multi-agent system using the MCP protocol, so I understand how agents actually consume and act on tools and messages.\n\nThat combination of reliable message plumbing and real agent experience feels like a good fit for a founding engineer building the inbox layer agents depend on.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to build the early product with you.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"hyperspell",
+  name:"Hyperspell",
+  one:"Memory for AI agents",
+  batch:"Fall 2025", team:6, loc:"SF, CA",
+  role:"Founding AI Engineer — 3+ years (strong project fit)",
+  url:"https://www.ycombinator.com/companies/hyperspell/jobs",
+  why:"Memory = retrieval. Your RAG + hybrid retrieval + re-ranking work is the core of it.",
+  msg:`Hi Hyperspell team,\n\nMemory for agents is really a retrieval problem done well, and that's exactly what I've built. My RAG pipeline does section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers. Those are the same primitives a good agent-memory layer needs: relevant recall, ranking, and trustworthy provenance.\n\nI pair that with real agent experience (Sentinel-ES, a multi-agent system on the MCP protocol) and solid backend skills in Python and FastAPI on AWS. I know the role lists 3+ years. Between my Amazon internship, two years at Enphase, and these projects, I'd ask you to judge me on the retrieval systems I've actually shipped.\n\nI just finished my MS in CS at Stony Brook, and memory is the problem I most want to work on.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"pgdog",
+  name:"PgDog",
+  one:"Scaling engine for PostgreSQL (load balancing & sharding)",
+  batch:"Spring 2025", team:3, loc:"SF / Remote (US)",
+  role:"Founding Software Engineer — 3+ years (strong project fit)",
+  url:"https://www.ycombinator.com/companies/pgdog/jobs",
+  why:"Sharding + consistency — your Go Paxos/2PC sharded system is directly on-topic.",
+  msg:`Hi PgDog team,\n\nSharding and consistency in a database are the exact problems I dug into for my distributed systems project. I built a fault-tolerant, sharded system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions, with transaction locking and failure recovery to keep data consistent when nodes fail. I benchmarked it across a 3,000-transaction workload and tuned the commit paths for concurrency.\n\nThat's basically a small version of what PgDog does for Postgres at scale. I'm comfortable in Go, happy working low in the stack, and I care a lot about correctness under failure. I know the role says 3+ years, so I'd point to this project plus my Amazon and Enphase experience and let the work speak for itself.\n\nI just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"afterquery",
+  name:"AfterQuery",
+  one:"Applied research lab curating data solutions for foundation models",
+  batch:"Winter 2025", team:30, loc:"SF, CA",
+  role:"Software Engineer — Applied AI / Platform — 1+ years",
+  url:"https://www.ycombinator.com/companies/afterquery/jobs",
+  why:"Applied AI + data platform — your LLM data pipelines and eval mindset fit well.",
+  msg:`Hi AfterQuery team,\n\nCurating high-quality data for foundation models is applied AI engineering at its core, and it's the work I've gravitated toward. I built an LLM pipeline that extracts structured data from unstructured documents and audio (Whisper, then entity extraction, then schema-validated output), plus a RAG system with hybrid retrieval and re-ranking. So I've spent real time on data quality, grounding, and validation, not just model calls.\n\nI'm strong on the platform side too: FastAPI, AWS (Fargate, SQS, Kafka), Docker and Kubernetes, and an observability habit (Datadog into SQL, visualized in Grafana) for catching regressions early. That blend of applied AI and reliable platform engineering is what I'd bring.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+}
+];
+
+const KEY = "yc_tracker_v1";
+// State is persisted to a JSON file on disk via the local server (/api/state).
+// localStorage is kept only as an offline fallback if the server isn't running.
+let state = JSON.parse(localStorage.getItem(KEY) || "{}");
+
+function save(){
+  localStorage.setItem(KEY, JSON.stringify(state));
+  refreshCount();
+  fetch("/api/state", {
+    method: "POST",
+    headers: {"Content-Type": "application/json"},
+    body: JSON.stringify(state)
+  }).catch(() => {/* offline: localStorage still holds it */});
+}
+function refreshCount(){
+  const n = JOBS.filter(j => state[j.id] && state[j.id].applied).length;
+  document.getElementById("cdone").textContent = n;
+}
+
+const root = document.getElementById("cards");
+JOBS.forEach((j, i) => {
+  const s = state[j.id] || {};
+  const card = document.createElement("div");
+  card.className = "card" + (s.applied ? " done" : "");
+  card.id = "card-" + j.id;
+  card.innerHTML = `
+    <div class="top">
+      <div>
+        <p class="name"><span class="num">${i+1}.</span>${j.name}</p>
+        <p class="one">${j.one}</p>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag">${j.batch}</span>
+      <span class="tag">Team ~${j.team}</span>
+      <span class="tag">${j.loc}</span>
+    </div>
+    <div class="role">${j.role}</div>
+    <div class="why"><b>Why you fit:</b> ${j.why}</div>
+    <div class="links"><a href="${j.url}" target="_blank" rel="noopener">Open role &amp; apply ↗</a></div>
+    <label class="msglbl">Personalized message (paste into the application)</label>
+    <textarea class="msg" id="msg-${j.id}" readonly>${j.msg.replace(/</g,"&lt;")}</textarea>
+    <button class="copy" data-id="${j.id}">Copy message</button>
+    <div class="track">
+      <label class="chk"><input type="checkbox" data-id="${j.id}" ${s.applied ? "checked":""}> Applied</label>
+      <div class="reason">
+        <label class="msglbl" style="margin-top:8px">If not applied — why? (notes save automatically)</label>
+        <textarea data-reason="${j.id}" placeholder="e.g. role closed, needs 3+ yrs, no sponsorship, not a fit...">${(s.reason||"").replace(/</g,"&lt;")}</textarea>
+      </div>
+    </div>`;
+  root.appendChild(card);
+});
+
+root.addEventListener("change", e => {
+  if (e.target.matches('input[type="checkbox"]')) {
+    const id = e.target.dataset.id;
+    state[id] = state[id] || {};
+    state[id].applied = e.target.checked;
+    document.getElementById("card-"+id).classList.toggle("done", e.target.checked);
+    save();
+  }
+});
+root.addEventListener("input", e => {
+  if (e.target.matches('textarea[data-reason]')) {
+    const id = e.target.dataset.reason;
+    state[id] = state[id] || {};
+    state[id].reason = e.target.value;
+    save();
+  }
+});
+root.addEventListener("click", e => {
+  if (e.target.matches('.copy')) {
+    const id = e.target.dataset.id;
+    const ta = document.getElementById("msg-"+id);
+    navigator.clipboard.writeText(ta.value).then(()=>{
+      const t = e.target.textContent; e.target.textContent = "Copied ✓";
+      setTimeout(()=> e.target.textContent = t, 1200);
+    });
+  }
+});
+refreshCount();
+
+// On load, pull the authoritative state from the on-disk ledger and sync the UI.
+fetch("/api/state").then(r => r.ok ? r.json() : null).then(server => {
+  if (!server) return;
+  state = server;
+  localStorage.setItem(KEY, JSON.stringify(state));
+  JOBS.forEach(j => {
+    const s = state[j.id] || {};
+    const cb = document.querySelector('input[type="checkbox"][data-id="'+j.id+'"]');
+    const rs = document.querySelector('textarea[data-reason="'+j.id+'"]');
+    if (cb) cb.checked = !!s.applied;
+    if (rs) rs.value = s.reason || "";
+    document.getElementById("card-"+j.id).classList.toggle("done", !!s.applied);
+  });
+  refreshCount();
+}).catch(() => {/* offline: keep localStorage state */});
+</script>
+</body>
+</html>
