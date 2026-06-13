@@ -35,6 +35,11 @@
   .reason { margin-top:8px; }
   .reason textarea { min-height:46px; }
   .num { color:var(--accent); font-weight:700; margin-right:6px; }
+  .tabs { display:flex; gap:8px; margin-bottom:18px; }
+  .tab { flex:0 0 auto; background:var(--card); border:1px solid var(--line); color:#444; border-radius:10px; padding:9px 18px; font:inherit; font-size:14px; font-weight:600; cursor:pointer; }
+  .tab:hover { border-color:#cfcfcf; }
+  .tab.active { background:var(--ink); color:#fff; border-color:var(--ink); }
+  .empty { color:var(--muted); font-size:14px; text-align:center; padding:32px 16px; background:var(--card); border:1px dashed var(--line); border-radius:12px; }
   footer { color:var(--muted); font-size:12px; text-align:center; margin-top:24px; }
 </style>
 </head>
@@ -46,8 +51,14 @@
     <div><b id="cdone">0</b>/10 applied</div>
     <div class="sub" style="margin:0">Filters: US · team 1–100 · isHiring · recent batches (W25–W26). Checkboxes &amp; notes auto-save in this browser.</div>
   </div>
+  <div class="tabs">
+    <button class="tab active" data-tab="todo">To Apply (<span id="ntodo">10</span>)</button>
+    <button class="tab" data-tab="applied">Applied (<span id="napplied">0</span>)</button>
+  </div>
   <div id="cards"></div>
-  <footer>Roles verified on YC on 2026-06-13. Apply links open YC login → Work at a Startup application. Re-check listings before applying — startups close roles fast.</footer>
+  <div id="applied-cards" hidden></div>
+  <p id="empty-applied" class="empty" hidden>Nothing here yet. Tick “Applied” on a card and it’ll move into this tab.</p>
+  <footer>Roles verified on YC on 2026-06-13. Links open each startup’s YC company page. Re-check listings before applying — startups close roles fast.</footer>
 </div>
 
 <script>
@@ -161,19 +172,42 @@ let state = JSON.parse(localStorage.getItem(KEY) || "{}");
 
 function save(){
   localStorage.setItem(KEY, JSON.stringify(state));
-  refreshCount();
+  updateViews();
   fetch("/api/state", {
     method: "POST",
     headers: {"Content-Type": "application/json"},
     body: JSON.stringify(state)
   }).catch(() => {/* offline: localStorage still holds it */});
 }
-function refreshCount(){
-  const n = JOBS.filter(j => state[j.id] && state[j.id].applied).length;
-  document.getElementById("cdone").textContent = n;
-}
 
 const root = document.getElementById("cards");
+const appliedRoot = document.getElementById("applied-cards");
+let activeTab = "todo";
+
+// Put a card in the right column based on its applied state.
+function placeCard(id){
+  const card = document.getElementById("card-"+id);
+  if (!card) return;
+  const applied = !!(state[id] && state[id].applied);
+  (applied ? appliedRoot : root).appendChild(card);
+}
+
+function updateViews(){
+  const napplied = JOBS.filter(j => state[j.id] && state[j.id].applied).length;
+  const ntodo = JOBS.length - napplied;
+  document.getElementById("napplied").textContent = napplied;
+  document.getElementById("ntodo").textContent = ntodo;
+  document.getElementById("cdone").textContent = napplied;
+  // toggle visible column
+  root.hidden = activeTab !== "todo";
+  appliedRoot.hidden = activeTab !== "applied";
+  // empty-state message for the applied tab
+  const emptyApplied = document.getElementById("empty-applied");
+  emptyApplied.hidden = !(activeTab === "applied" && napplied === 0);
+  document.querySelectorAll(".tab").forEach(t =>
+    t.classList.toggle("active", t.dataset.tab === activeTab));
+}
+
 JOBS.forEach((j, i) => {
   const s = state[j.id] || {};
   const card = document.createElement("div");
@@ -207,16 +241,17 @@ JOBS.forEach((j, i) => {
   root.appendChild(card);
 });
 
-root.addEventListener("change", e => {
-  if (e.target.matches('input[type="checkbox"]')) {
+document.addEventListener("change", e => {
+  if (e.target.matches('input[type="checkbox"][data-id]')) {
     const id = e.target.dataset.id;
     state[id] = state[id] || {};
     state[id].applied = e.target.checked;
     document.getElementById("card-"+id).classList.toggle("done", e.target.checked);
+    placeCard(id);
     save();
   }
 });
-root.addEventListener("input", e => {
+document.addEventListener("input", e => {
   if (e.target.matches('textarea[data-reason]')) {
     const id = e.target.dataset.reason;
     state[id] = state[id] || {};
@@ -224,7 +259,7 @@ root.addEventListener("input", e => {
     save();
   }
 });
-root.addEventListener("click", e => {
+document.addEventListener("click", e => {
   if (e.target.matches('.copy')) {
     const id = e.target.dataset.id;
     const ta = document.getElementById("msg-"+id);
@@ -232,9 +267,15 @@ root.addEventListener("click", e => {
       const t = e.target.textContent; e.target.textContent = "Copied ✓";
       setTimeout(()=> e.target.textContent = t, 1200);
     });
+  } else if (e.target.matches('.tab')) {
+    activeTab = e.target.dataset.tab;
+    updateViews();
   }
 });
-refreshCount();
+
+// Initial placement: route any already-applied cards into the Applied tab.
+JOBS.forEach(j => placeCard(j.id));
+updateViews();
 
 // On load, pull the authoritative state from the on-disk ledger and sync the UI.
 fetch("/api/state").then(r => r.ok ? r.json() : null).then(server => {
@@ -248,8 +289,9 @@ fetch("/api/state").then(r => r.ok ? r.json() : null).then(server => {
     if (cb) cb.checked = !!s.applied;
     if (rs) rs.value = s.reason || "";
     document.getElementById("card-"+j.id).classList.toggle("done", !!s.applied);
+    placeCard(j.id);
   });
-  refreshCount();
+  updateViews();
 }).catch(() => {/* offline: keep localStorage state */});
 </script>
 </body>
