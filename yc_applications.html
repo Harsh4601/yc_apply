@@ -75,106 +75,105 @@
 </div>
 
 <script>
-const CURATED = [
-{
-  id:"manufact",
-  name:"Manufact (formerly mcp-use)",
-  one:"Open-source SDK & cloud infrastructure for MCP servers & chat apps",
-  batch:"Summer 2025", team:5, loc:"SF / Remote (US)",
-  role:"Software Engineer (Founding Team) — Any (new grads ok)",
-  url:"https://www.ycombinator.com/companies/manufact/jobs",
-  why:"Direct MCP match — you built Sentinel-ES on the MCP protocol for tool orchestration.",
-  msg:`Hi Manufact team,\n\nmcp-use caught my eye because I've already built on the MCP protocol. I made Sentinel-ES, a multi-agent incident-response system where an orchestrator coordinates three autonomous agents and uses MCP for tool orchestration, with human-in-the-loop rollback approval before anything destructive runs. So your bet on MCP as core infrastructure is one I'm genuinely excited about, not just familiar with.\n\nMy background fits a founding engineer role well. I work across Python, Go, and TypeScript, build FastAPI backends, and wrote a fault-tolerant distributed system in Go using Paxos and 2PC. I just finished my MS in CS at Stony Brook, and before that I interned at Amazon and spent two years at Enphase owning automation and infra end to end.\n\nI'd love to help build the open-source SDK and cloud platform, and I'm happy to walk you through the Sentinel-ES code.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"dedalus",
-  name:"Dedalus Labs",
-  one:"MCP gateway — a single drop-in API endpoint unifying the AI agent ecosystem",
-  batch:"Summer 2025", team:10, loc:"Remote / Any",
-  role:"Distributed Systems Engineer — Any (new grads ok)",
-  url:"https://www.ycombinator.com/companies/dedalus-labs/jobs",
-  why:"Distributed systems + MCP — maps to your Go Paxos/2PC project and MCP work.",
-  msg:`Hi Dedalus team,\n\nA distributed systems role on an MCP gateway is almost exactly what I want to build. For a graduate project I implemented a fault-tolerant distributed banking system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions over net/rpc, with sharding, transaction locking, and failure recovery. I then benchmarked it across a 3,000-transaction workload and tuned the commit paths for better concurrency.\n\nI've also worked directly with MCP. My Sentinel-ES project uses the MCP protocol to orchestrate autonomous agents. Pair that with my backend work in FastAPI and AWS (Fargate, SQS, Kafka), and a single reliable drop-in endpoint for the agent ecosystem is the kind of problem I'd really enjoy owning.\n\nI just finished my MS in CS at Stony Brook, and previously worked at Amazon and Enphase.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"sixtyfour",
-  name:"Sixtyfour",
-  one:"Intelligence infrastructure on people and entities",
-  batch:"Spring 2025", team:12, loc:"SF / Remote (US)",
-  role:"AI Engineer — Any (new grads ok)",
-  url:"https://www.ycombinator.com/companies/sixtyfour/jobs",
-  why:"Entity intelligence = your RAG + hybrid retrieval + LLM entity-extraction work.",
-  msg:`Hi Sixtyfour team,\n\nBuilding intelligence infrastructure over people and entities lines up closely with what I've been doing. I built a RAG pipeline with section-aware document chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking for grounded, source-attributed answers. I also built a NEMSIS pipeline that pulls structured entities out of messy EMS encounter data using LLM chains and emits schema-validated output.\n\nThat's exactly the shape of work entity enrichment needs: messy inputs in, structured and attributed intelligence out. I'm comfortable across Python, FastAPI, vector databases, and the major LLM APIs (Claude, OpenAI, Groq).\n\nI just finished my MS in CS at Stony Brook and interned at Amazon before that. I'd love to help build the AI layer here.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"browseruse",
-  name:"Browser Use",
-  one:"Leading open-source web agent (50k+ GitHub stars)",
-  batch:"Winter 2025", team:7, loc:"SF, CA",
-  role:"Software Engineer — 1+ years",
-  url:"https://www.ycombinator.com/companies/browser-use/jobs",
-  why:"Open-source web agents in Python — your multi-agent + Python wheelhouse.",
-  msg:`Hi Browser Use team,\n\nBrowser Use is the kind of project I'd use even if I didn't work there. It's a genuinely great open-source web agent, and I'd love to contribute to it full time.\n\nMy work centers on agentic systems in Python. I built Sentinel-ES, a multi-agent system with three parallel autonomous agents under an orchestrator that drives incident response end to end, with MCP-based tool orchestration and human-in-the-loop guardrails. I also have a strong testing and automation instinct from my Amazon internship, where I built a Cypress and TypeScript framework that hit 85% end-to-end coverage. That matters a lot for keeping a browser agent reliable across messy real-world sites.\n\nI just finished my MS in CS at Stony Brook, and I'd be glad to open a PR to introduce myself.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"osmosis",
-  name:"Osmosis",
-  one:"Reinforcement learning / fine-tuning for AI agents",
+const CURATED = [{
+  id:"zeroentropy",
+  name:"ZeroEntropy",
+  one:"Artificial Specialized Intelligence — high-accuracy retrieval & reranking",
   batch:"Winter 2025", team:6, loc:"SF, CA",
-  role:"Machine Learning Engineer — 1+ years",
-  url:"https://www.ycombinator.com/companies/osmosis/jobs",
-  why:"RL for agents — pairs your ML coursework with hands-on agentic systems.",
-  msg:`Hi Osmosis team,\n\nReinforcement fine-tuning for agents sits right where my coursework (Machine Learning and Recent Advances in AI/ML at Stony Brook) meets my hands-on agent work. I built Sentinel-ES, a multi-agent system where autonomous agents coordinate to resolve incidents, so I've seen firsthand the gap between a model that benchmarks well and one that actually acts reliably in a loop.\n\nOn the engineering side I'm solid in Python and FastAPI, work with LLM APIs daily, and have built RAG and data pipelines that feed model workflows end to end. I also care a lot about measurement. At Enphase I built observability pipelines (Datadog into SQL, visualized in Grafana) to catch regressions early.\n\nI just finished my MS in CS and interned at Amazon. I'm genuinely excited about RL for agents.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"luminal",
-  name:"Luminal",
-  one:"Making AI run fast on any hardware",
-  batch:"Summer 2025", team:5, loc:"SF, CA",
-  role:"Cloud Inference Engineer — Any (new grads ok)",
-  url:"https://www.ycombinator.com/companies/luminal/jobs",
-  why:"Inference perf/infra — maps to your AWS Fargate + latency/throughput benchmarking.",
-  msg:`Hi Luminal team,\n\nMaking inference fast is really a performance and infrastructure problem, and that's where I'm strongest. At Enphase I built an observability pipeline that ingested Datadog APM metrics into SQL and visualized latency in Grafana, and I expanded JMeter load coverage by 70% across 300+ endpoints to catch performance regressions. In my distributed systems project I benchmarked a 3,000-transaction workload, found the bottlenecks, and tuned the commit paths for throughput.\n\nI'm comfortable deploying on AWS (Fargate, S3, SQS), Docker, and Kubernetes, and I code in C++, Python, and Go. I just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to go deep on cloud inference performance.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"agentmail",
-  name:"AgentMail",
-  one:"Email inboxes built for AI agents",
-  batch:"Summer 2025", team:8, loc:"SF, CA",
   role:"Founding Engineer — Any (new grads ok)",
-  url:"https://www.ycombinator.com/companies/agentmail/jobs",
-  why:"Agent-facing backend infra — FastAPI + AWS SQS/Kafka + agents.",
-  msg:`Hi AgentMail team,\n\nInbox infrastructure for agents is a backend and messaging problem, and that's exactly the work I enjoy. At Enphase I worked with AWS CLI, Kafka, and MongoDB to inject and validate messages through an end-to-end ingestion pipeline, and I build APIs in FastAPI and Django on AWS (Fargate, S3, SQS). On the agent side, I built Sentinel-ES, a multi-agent system using the MCP protocol, so I understand how agents actually consume and act on tools and messages.\n\nThat combination of reliable message plumbing and real agent experience feels like a good fit for a founding engineer building the inbox layer agents depend on.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to build the early product with you.\n\nBest,\nHarsh Londhekar`
+  url:"https://www.ycombinator.com/companies/zeroentropy/jobs",
+  why:"Retrieval and reranking is the exact core of your RAG + hybrid retrieval + re-ranking work.",
+  msg:`Hi ZeroEntropy team,\n\nHigh-accuracy retrieval and reranking is the problem I've spent the most time on. I built a RAG pipeline with section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers. Squeezing accuracy out of retrieval, and measuring it honestly, is work I genuinely enjoy.\n\nI back that with strong engineering: Python, FastAPI, and a fault-tolerant distributed system in Go, plus AWS and Docker for shipping. I just finished my MS in CS at Stony Brook and interned at Amazon before that.\n\nI'd love to help build the retrieval layer here.\n\nBest,\nHarsh Londhekar`
 },
 {
-  id:"hyperspell",
-  name:"Hyperspell",
-  one:"Memory for AI agents",
+  id:"jarmin",
+  name:"Jarmin",
+  one:"AI Employees for human-level roles",
+  batch:"Fall 2025", team:3, loc:"SF, CA",
+  role:"Founding Backend Engineer — Any (new grads ok)",
+  why:"Backend for autonomous AI employees lines up with your FastAPI + multi-agent work.",
+  url:"https://www.ycombinator.com/companies/jarmin/jobs",
+  msg:`Hi Jarmin team,\n\nBuilding AI employees that handle human-level roles is a backend and agent problem, and that's where I'm strongest. I built Sentinel-ES, a multi-agent system where an orchestrator coordinates autonomous agents to resolve incidents, with MCP-based tool orchestration and human-in-the-loop guardrails. On the backend I build APIs in FastAPI and Django on AWS (Fargate, S3, SQS), and I've run Kafka and MongoDB pipelines from my time at Enphase.\n\nThat mix of reliable backend plumbing and real agent experience is what a founding backend engineer needs. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"sim",
+  name:"Sim",
+  one:"Open-source platform to build AI agent workflows",
+  batch:"Spring 2025", team:6, loc:"SF, CA",
+  role:"Software Engineer, Agents — Any (new grads ok)",
+  why:"OSS agent workflows = your multi-agent orchestration (Sentinel-ES) and Python.",
+  url:"https://www.ycombinator.com/companies/sim/jobs",
+  msg:`Hi Sim team,\n\nAn open-source platform for building AI agent workflows is something I'd happily work on full time. I built Sentinel-ES, a multi-agent system with three parallel autonomous agents under an orchestrator, using the MCP protocol for tool orchestration and human-in-the-loop approval before anything destructive runs. So I've already wrestled with the real problems in agent workflows: coordination, tool calls, and safe execution.\n\nI'm fluent in Python and TypeScript, build FastAPI backends, and care about clean developer experience in open source. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nI'd love to contribute, and I'm happy to open a PR to introduce myself.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"unsiloed-ai",
+  name:"Unsiloed AI",
+  one:"API for parsing multimodal unstructured data",
+  batch:"Fall 2025", team:2, loc:"SF, CA",
+  role:"Founding SWE, Backend & Infrastructure — Any (new grads ok)",
+  why:"Parsing unstructured docs is your section-aware PDF/DOCX chunking and extraction work.",
+  url:"https://www.ycombinator.com/companies/unsiloed-ai/jobs",
+  msg:`Hi Unsiloed team,\n\nParsing messy multimodal documents into clean structured data is work I've shipped. I built a pipeline with section-aware PDF and DOCX chunking, plus a NEMSIS generator that extracts structured fields from unstructured encounter data via LLM chains and outputs schema-validated XML across multiple sections. I also added a Whisper-based audio path feeding the same workflow.\n\nFor a backend and infrastructure role I bring Python and FastAPI, AWS (Fargate, S3, SQS), Docker, and Kubernetes, plus an observability habit from building Datadog and Grafana pipelines. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"nessie",
+  name:"Nessie",
+  one:"A shared context layer for you, your team, and your agents",
+  batch:"Fall 2025", team:2, loc:"SF, CA",
+  role:"Founding Engineer — 1+ years",
+  why:"Persistent memory/context for agents is exactly your retrieval and RAG background.",
+  url:"https://www.ycombinator.com/companies/nessie/jobs",
+  msg:`Hi Nessie team,\n\nA shared context layer for people, teams, and agents is fundamentally a retrieval and memory problem, which is exactly what I've built. My RAG pipeline does section-aware chunking, embeddings in ChromaDB, and hybrid retrieval with re-ranking for grounded, source-attributed answers. Those are the same primitives a good shared-context layer needs: relevant recall, ranking, and trustworthy provenance.\n\nI pair that with real agent experience (Sentinel-ES on the MCP protocol) and solid backend work in Python and FastAPI on AWS. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"lumari",
+  name:"Lumari",
+  one:"AI Digital Workers for Supply Chain",
+  batch:"Spring 2025", team:5, loc:"SF, CA",
+  role:"Software Engineer — Any (new grads ok)",
+  why:"Agentic digital workers plus backend = your Python/FastAPI and multi-agent work.",
+  url:"https://www.ycombinator.com/companies/lumari/jobs",
+  msg:`Hi Lumari team,\n\nAI digital workers for supply chain need reliable agents plus solid backend plumbing, and that's my sweet spot. I built Sentinel-ES, a multi-agent system where autonomous agents coordinate under an orchestrator with human-in-the-loop guardrails, and I build APIs in FastAPI and Django on AWS. At Enphase I also worked with Kafka and MongoDB pipelines and built observability dashboards to keep systems healthy.\n\nI'm comfortable owning ambiguous, end-to-end work, which is what an early software engineer role calls for. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"contrario",
+  name:"Contrario",
+  one:"AI hiring platform powered by expert recruiters",
+  batch:"Winter 2025", team:15, loc:"SF, CA",
+  role:"Applied AI Engineer — Any (new grads ok)",
+  why:"Applied AI on real workflows = your RAG/LLM pipelines and entity extraction.",
+  url:"https://www.ycombinator.com/companies/contrario/jobs",
+  msg:`Hi Contrario team,\n\nApplied AI on real hiring workflows is the kind of grounded LLM work I like. I built a RAG pipeline with hybrid retrieval and re-ranking for source-attributed answers, and an LLM pipeline that extracts structured entities from unstructured documents and audio. So I've spent real time on the unglamorous parts: data quality, grounding, and validation, not just model calls.\n\nI'm strong on engineering too: Python, FastAPI, AWS, Docker, and the major LLM APIs (Claude, OpenAI, Groq). I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nI'd love to help build the applied AI here.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"airweave",
+  name:"Airweave",
+  one:"The open-source context retrieval layer for agents",
+  batch:"Spring 2025", team:7, loc:"SF / Amsterdam",
+  role:"Founding SWE, Data Infrastructure — 3+ years (strong fit)",
+  why:"Context retrieval for agents is the literal core of your RAG/retrieval work.",
+  url:"https://www.ycombinator.com/companies/airweave/jobs",
+  msg:`Hi Airweave team,\n\nAn open-source context retrieval layer for agents is almost a description of what I've been building. My RAG pipeline does section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking for grounded, source-attributed answers. For a data infrastructure role I also bring real pipeline experience: Kafka and MongoDB ingestion at Enphase, plus AWS, Docker, and Kubernetes.\n\nI know the role lists 3+ years. Between my Amazon internship, two years at Enphase, and these retrieval projects, I'd ask you to judge me on what I've shipped. I just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"multifactor",
+  name:"Multifactor",
+  one:"Zero-trust authentication, authorization, and auditing for AI agents",
   batch:"Fall 2025", team:6, loc:"SF, CA",
-  role:"Founding AI Engineer — 3+ years (strong project fit)",
-  url:"https://www.ycombinator.com/companies/hyperspell/jobs",
-  why:"Memory = retrieval. Your RAG + hybrid retrieval + re-ranking work is the core of it.",
-  msg:`Hi Hyperspell team,\n\nMemory for agents is really a retrieval problem done well, and that's exactly what I've built. My RAG pipeline does section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers. Those are the same primitives a good agent-memory layer needs: relevant recall, ranking, and trustworthy provenance.\n\nI pair that with real agent experience (Sentinel-ES, a multi-agent system on the MCP protocol) and solid backend skills in Python and FastAPI on AWS. I know the role lists 3+ years. Between my Amazon internship, two years at Enphase, and these projects, I'd ask you to judge me on the retrieval systems I've actually shipped.\n\nI just finished my MS in CS at Stony Brook, and memory is the problem I most want to work on.\n\nBest,\nHarsh Londhekar`
+  role:"Founding Engineer — 3+ years (strong fit)",
+  why:"Auth and auditing maps to your Amazon SSO auth-bypass utility and backend security.",
+  url:"https://www.ycombinator.com/companies/multifactor/jobs",
+  msg:`Hi Multifactor team,\n\nZero-trust auth and auditing for AI agents connects directly to work I've done. At Amazon I engineered an automated authentication utility that handled internal SSO so tests could run fully headless, so I've dealt with real auth flows and their edge cases. I've also built agent systems (Sentinel-ES on the MCP protocol) and care a lot about safe, auditable actions, which is why I added human-in-the-loop approval before destructive steps.\n\nOn the backend I work in Python, Go, FastAPI, and AWS. I know the role says 3+ years, so I'd point to that work and let it speak. I just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
 },
 {
-  id:"pgdog",
-  name:"PgDog",
-  one:"Scaling engine for PostgreSQL (load balancing & sharding)",
-  batch:"Spring 2025", team:3, loc:"SF / Remote (US)",
-  role:"Founding Software Engineer — 3+ years (strong project fit)",
-  url:"https://www.ycombinator.com/companies/pgdog/jobs",
-  why:"Sharding + consistency — your Go Paxos/2PC sharded system is directly on-topic.",
-  msg:`Hi PgDog team,\n\nSharding and consistency in a database are the exact problems I dug into for my distributed systems project. I built a fault-tolerant, sharded system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions, with transaction locking and failure recovery to keep data consistent when nodes fail. I benchmarked it across a 3,000-transaction workload and tuned the commit paths for concurrency.\n\nThat's basically a small version of what PgDog does for Postgres at scale. I'm comfortable in Go, happy working low in the stack, and I care a lot about correctness under failure. I know the role says 3+ years, so I'd point to this project plus my Amazon and Enphase experience and let the work speak for itself.\n\nI just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"afterquery",
-  name:"AfterQuery",
-  one:"Applied research lab curating data solutions for foundation models",
-  batch:"Winter 2025", team:30, loc:"SF, CA",
-  role:"Software Engineer — Applied AI / Platform — 1+ years",
-  url:"https://www.ycombinator.com/companies/afterquery/jobs",
-  why:"Applied AI + data platform — your LLM data pipelines and eval mindset fit well.",
-  msg:`Hi AfterQuery team,\n\nCurating high-quality data for foundation models is applied AI engineering at its core, and it's the work I've gravitated toward. I built an LLM pipeline that extracts structured data from unstructured documents and audio (Whisper, then entity extraction, then schema-validated output), plus a RAG system with hybrid retrieval and re-ranking. So I've spent real time on data quality, grounding, and validation, not just model calls.\n\nI'm strong on the platform side too: FastAPI, AWS (Fargate, SQS, Kafka), Docker and Kubernetes, and an observability habit (Datadog into SQL, visualized in Grafana) for catching regressions early. That blend of applied AI and reliable platform engineering is what I'd bring.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+  id:"halluminate",
+  name:"Halluminate",
+  one:"Data & RL environments (gyms) to train AI agents for financial services",
+  batch:"Summer 2025", team:5, loc:"SF, CA",
+  role:"Founding Member of Technical Staff — 3+ years (strong fit)",
+  why:"RL gyms and agent evaluation connect to your multi-agent systems and ML coursework.",
+  url:"https://www.ycombinator.com/companies/halluminate/jobs",
+  msg:`Hi Halluminate team,\n\nBuilding RL environments and tool-use gyms to train agents sits right where my agent work meets my ML coursework (Machine Learning and Recent Advances in AI/ML at Stony Brook). I built Sentinel-ES, a multi-agent system where autonomous agents coordinate to resolve incidents, so I understand agent behavior, tool use, and the gap between a model that benchmarks well and one that acts reliably.\n\nI also bring solid data and backend engineering: Python, FastAPI, AWS, and pipelines from my time at Enphase. I know the role lists 3+ years, so I'd point to these projects and my Amazon internship. I just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
 }
 ];
 

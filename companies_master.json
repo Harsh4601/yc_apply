@@ -1,15 +1,145 @@
 {
   "description": "Master ledger of every YC company already proposed to Harsh. Future fetches must EXCLUDE every slug listed here so the same company is never suggested twice.",
   "proposed": [
-    { "slug": "manufact",     "name": "Manufact (mcp-use)", "batch": "Summer 2025", "role": "Software Engineer (Founding Team)",      "proposed_on": "2026-06-13" },
-    { "slug": "dedalus-labs", "name": "Dedalus Labs",       "batch": "Summer 2025", "role": "Distributed Systems Engineer",          "proposed_on": "2026-06-13" },
-    { "slug": "sixtyfour",    "name": "Sixtyfour",          "batch": "Spring 2025", "role": "AI Engineer",                           "proposed_on": "2026-06-13" },
-    { "slug": "browser-use",  "name": "Browser Use",        "batch": "Winter 2025", "role": "Software Engineer",                     "proposed_on": "2026-06-13" },
-    { "slug": "osmosis",      "name": "Osmosis",            "batch": "Winter 2025", "role": "Machine Learning Engineer",             "proposed_on": "2026-06-13" },
-    { "slug": "luminal",      "name": "Luminal",            "batch": "Summer 2025", "role": "Cloud Inference Engineer",              "proposed_on": "2026-06-13" },
-    { "slug": "agentmail",    "name": "AgentMail",          "batch": "Summer 2025", "role": "Founding Engineer",                     "proposed_on": "2026-06-13" },
-    { "slug": "hyperspell",   "name": "Hyperspell",         "batch": "Fall 2025",   "role": "Founding AI Engineer",                  "proposed_on": "2026-06-13" },
-    { "slug": "pgdog",        "name": "PgDog",              "batch": "Spring 2025", "role": "Founding Software Engineer",            "proposed_on": "2026-06-13" },
-    { "slug": "afterquery",   "name": "AfterQuery",         "batch": "Winter 2025", "role": "Software Engineer - Applied AI/Platform","proposed_on": "2026-06-13" }
+    {
+      "slug": "manufact",
+      "name": "Manufact (mcp-use)",
+      "batch": "Summer 2025",
+      "role": "Software Engineer (Founding Team)",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "dedalus-labs",
+      "name": "Dedalus Labs",
+      "batch": "Summer 2025",
+      "role": "Distributed Systems Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "sixtyfour",
+      "name": "Sixtyfour",
+      "batch": "Spring 2025",
+      "role": "AI Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "browser-use",
+      "name": "Browser Use",
+      "batch": "Winter 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "osmosis",
+      "name": "Osmosis",
+      "batch": "Winter 2025",
+      "role": "Machine Learning Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "luminal",
+      "name": "Luminal",
+      "batch": "Summer 2025",
+      "role": "Cloud Inference Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "agentmail",
+      "name": "AgentMail",
+      "batch": "Summer 2025",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "hyperspell",
+      "name": "Hyperspell",
+      "batch": "Fall 2025",
+      "role": "Founding AI Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "pgdog",
+      "name": "PgDog",
+      "batch": "Spring 2025",
+      "role": "Founding Software Engineer",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "afterquery",
+      "name": "AfterQuery",
+      "batch": "Winter 2025",
+      "role": "Software Engineer - Applied AI/Platform",
+      "proposed_on": "2026-06-13"
+    },
+    {
+      "slug": "zeroentropy",
+      "name": "ZeroEntropy",
+      "batch": "Winter 2025",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "jarmin",
+      "name": "Jarmin",
+      "batch": "Fall 2025",
+      "role": "Founding Backend Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "sim",
+      "name": "Sim",
+      "batch": "Spring 2025",
+      "role": "Software Engineer, Agents",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "unsiloed-ai",
+      "name": "Unsiloed AI",
+      "batch": "Fall 2025",
+      "role": "Founding SWE, Backend & Infrastructure",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "nessie",
+      "name": "Nessie",
+      "batch": "Fall 2025",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "lumari",
+      "name": "Lumari",
+      "batch": "Spring 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "contrario",
+      "name": "Contrario",
+      "batch": "Winter 2025",
+      "role": "Applied AI Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "airweave",
+      "name": "Airweave",
+      "batch": "Spring 2025",
+      "role": "Founding SWE, Data Infrastructure",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "multifactor",
+      "name": "Multifactor",
+      "batch": "Fall 2025",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "halluminate",
+      "name": "Halluminate",
+      "batch": "Summer 2025",
+      "role": "Founding Member of Technical Staff",
+      "proposed_on": "2026-06-16"
+    }
   ]
 }
