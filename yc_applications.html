@@ -58,7 +58,8 @@
     <div class="sub" style="margin:0">Filters: US · team 1–100 · isHiring · recent batches (W25–W26). Checkboxes &amp; notes auto-save in this browser.</div>
   </div>
   <div class="resumebar">
-    <label class="upload">📄 Upload résumé (PDF)
+    <button id="fetch-btn" class="upload">🔄 Fetch new 10</button>
+    <label class="upload" style="background:#1a1a1a">📄 Upload résumé (PDF)
       <input type="file" id="resume" accept="application/pdf" hidden>
     </label>
     <span id="rstatus" class="rstatus">Optional: upload a résumé to fetch live YC matches ranked to it (same filters). Default below is the curated set.</span>
@@ -67,11 +68,9 @@
   <div class="tabs">
     <button class="tab active" data-tab="todo">To Apply (<span id="ntodo">10</span>)</button>
     <button class="tab" data-tab="applied">Applied (<span id="napplied">0</span>)</button>
-    <button class="tab" data-tab="all">All weeks (<span id="nall">20</span>)</button>
   </div>
   <div id="cards"></div>
   <div id="applied-cards" hidden></div>
-  <div id="all-cards" hidden></div>
   <p id="empty-applied" class="empty" hidden>Nothing here yet. Tick “Applied” on a card and it’ll move into this tab.</p>
   <footer>Roles verified on YC on 2026-06-13. Links open each startup’s YC company page. Re-check listings before applying — startups close roles fast.</footer>
 </div>
@@ -284,11 +283,18 @@ const ARCHIVE = [
 }
 ];
 
-let currentList = CURATED.slice();   // drives the "To Apply" tab (curated week, or résumé matches)
+let currentList = CURATED.slice();   // drives the "To Apply" tab (curated, fetched, or résumé matches)
+
+// Persistent catalog of every company ever shown. Keeps the Applied tab's data
+// intact across "Fetch new" and reloads, so applied progress is never lost.
+const KNOWN_KEY = "yc_known_v1";
+let known = JSON.parse(localStorage.getItem(KNOWN_KEY) || "{}");
+function remember(list){ list.forEach(c => { known[c.id] = c; }); localStorage.setItem(KNOWN_KEY, JSON.stringify(known)); }
 
 // Every company across all weeks, used to render the Applied tab.
 function registry(){
   const m = {};
+  Object.values(known).forEach(c => m[c.id] = c);
   ARCHIVE.forEach(c => m[c.id] = c);
   CURATED.forEach(c => m[c.id] = c);
   currentList.forEach(c => m[c.id] = c);
@@ -312,7 +318,6 @@ function save(){
 
 const root = document.getElementById("cards");
 const appliedRoot = document.getElementById("applied-cards");
-const allRoot = document.getElementById("all-cards");
 let activeTab = "todo";
 
 function esc(x){ return String(x==null?"":x).replace(/</g,"&lt;"); }
@@ -353,26 +358,22 @@ function makeCard(j, idx){
 
 // Render only the active tab (avoids duplicate element IDs across columns).
 function renderActive(){
-  root.innerHTML = ""; appliedRoot.innerHTML = ""; allRoot.innerHTML = "";
+  root.innerHTML = ""; appliedRoot.innerHTML = "";
   const reg = registry();
-  if (activeTab === "todo"){
-    let n = 0;
-    currentList.forEach(j => { if (!isApplied(j.id)) root.appendChild(makeCard(j, ++n)); });
-  } else if (activeTab === "applied"){
+  if (activeTab === "applied"){
     let m = 0;
     Object.values(reg).filter(c => isApplied(c.id))
       .sort((a,b) => a.name.localeCompare(b.name))
       .forEach(c => appliedRoot.appendChild(makeCard(c, ++m)));
-  } else { // "all" — current batch first, then everything else, de-duped
-    const seen = new Set(); let k = 0;
-    const ordered = currentList.concat(Object.values(reg).filter(c => !currentList.some(x => x.id === c.id)));
-    ordered.forEach(c => { if (!seen.has(c.id)){ seen.add(c.id); allRoot.appendChild(makeCard(c, ++k)); } });
+  } else {
+    let n = 0;
+    currentList.forEach(j => { if (!isApplied(j.id)) root.appendChild(makeCard(j, ++n)); });
   }
   updateViews();
 }
 
 // Public entry: swap the current batch (curated week or résumé matches) and show To Apply.
-function renderJobs(list){ currentList = list; activeTab = "todo"; renderActive(); }
+function renderJobs(list){ currentList = list; remember(list); activeTab = "todo"; renderActive(); }
 
 function updateViews(){
   const reg = registry();
@@ -380,11 +381,9 @@ function updateViews(){
   const ntodo = currentList.filter(j => !isApplied(j.id)).length;
   document.getElementById("napplied").textContent = napplied;
   document.getElementById("ntodo").textContent = ntodo;
-  document.getElementById("nall").textContent = Object.keys(reg).length;
   document.getElementById("cdone").textContent = napplied;
-  root.hidden = activeTab !== "todo";
   appliedRoot.hidden = activeTab !== "applied";
-  allRoot.hidden = activeTab !== "all";
+  root.hidden = activeTab === "applied";
   document.getElementById("empty-applied").hidden = !(activeTab === "applied" && napplied === 0);
   document.querySelectorAll(".tab").forEach(t =>
     t.classList.toggle("active", t.dataset.tab === activeTab));
@@ -532,12 +531,13 @@ async function matchFromResume(file){
     const name = extractName(text);
     setStatus("Fetching live YC hiring data …");
     const [companies, excluded] = await Promise.all([loadHiring(), loadExclusions()]);
+    const skip = new Set([...excluded, ...Object.keys(known)]);
     const matches = companies
       .filter(c => c.isHiring
         && (c.regions||[]).includes("United States of America")
         && c.team_size >= 1 && c.team_size <= 100
         && RECENT_BATCHES.has(c.batch)
-        && !excluded.has(c.slug))
+        && !skip.has(c.slug))
       .map(c => ({ c, score: scoreCompany(c, skills) }))
       .sort((a,b) => b.score - a.score)
       .slice(0, 10)
@@ -563,9 +563,42 @@ document.getElementById("resume").addEventListener("change", e => {
 document.getElementById("reset-btn").addEventListener("click", () => {
   renderJobs(CURATED);
   document.getElementById("reset-btn").hidden = true;
-  setStatus("Showing the curated set. Upload a résumé to fetch live YC matches.");
+  setStatus("Showing the curated set. Use “Fetch new 10” or upload a résumé for live matches.");
   document.getElementById("resume").value = "";
 });
+
+/* "Fetch new 10": pull the latest YC startups under the same conditions
+   (US, team 1-100, isHiring, recent batches), excluding anything already
+   proposed or already shown, ranked to the default profile. */
+const DEFAULT_SKILLS = ["python","go","typescript","c++","fastapi","django","rag","retrieval","vector","embedding","llm","openai","claude","groq","agent","mcp","whisper","aws","docker","kubernetes","fargate","sqs","kafka","postgres","sql","mongodb","elasticsearch","sqlite","distributed","consensus","paxos","sharding","ci/cd","jenkins","observability","datadog","grafana","machine learning","backend","full-stack","infrastructure","devops","testing","cypress","automation","ai","api","data"];
+const DEFAULT_NAME = "Harsh Londhekar";
+
+async function fetchNew(){
+  const btn = document.getElementById("fetch-btn");
+  try {
+    btn.disabled = true; setStatus("Fetching the latest YC startups …");
+    const [companies, excluded] = await Promise.all([loadHiring(), loadExclusions()]);
+    const skip = new Set([...excluded, ...Object.keys(known)]);
+    const matches = companies
+      .filter(c => c.isHiring
+        && (c.regions||[]).includes("United States of America")
+        && c.team_size >= 1 && c.team_size <= 100
+        && RECENT_BATCHES.has(c.batch)
+        && !skip.has(c.slug))
+      .map(c => ({ c, score: scoreCompany(c, DEFAULT_SKILLS) }))
+      .sort((a,b) => b.score - a.score)
+      .slice(0, 10)
+      .map(({c}) => toJob(c, DEFAULT_SKILLS, DEFAULT_NAME));
+    if (!matches.length){ setStatus("No new startups left under the current filters — you've seen them all."); return; }
+    renderJobs(matches);              // remembers + shows in To Apply
+    document.getElementById("reset-btn").hidden = false;
+    setStatus(matches.length + " fresh startups (US · team 1–100 · hiring · recent batches). Messages are skill-based drafts — personalize before sending.");
+  } catch (err) {
+    console.error(err);
+    setStatus("Couldn't fetch right now (" + (err.message||err) + ").");
+  } finally { btn.disabled = false; }
+}
+document.getElementById("fetch-btn").addEventListener("click", fetchNew);
 </script>
 </body>
 </html>
