@@ -54,7 +54,7 @@
   <h1>YC Application Tracker</h1>
   <div class="sub">Harsh Londhekar · AI / Software Engineer · MS CS, Stony Brook (May 2026) · open to OPT/STEM-OPT, new grad</div>
   <div class="bar">
-    <div><b id="cdone">0</b>/10 applied</div>
+    <div><b id="cdone">0</b> applied (all weeks)</div>
     <div class="sub" style="margin:0">Filters: US · team 1–100 · isHiring · recent batches (W25–W26). Checkboxes &amp; notes auto-save in this browser.</div>
   </div>
   <div class="resumebar">
@@ -67,9 +67,11 @@
   <div class="tabs">
     <button class="tab active" data-tab="todo">To Apply (<span id="ntodo">10</span>)</button>
     <button class="tab" data-tab="applied">Applied (<span id="napplied">0</span>)</button>
+    <button class="tab" data-tab="all">All weeks (<span id="nall">20</span>)</button>
   </div>
   <div id="cards"></div>
   <div id="applied-cards" hidden></div>
+  <div id="all-cards" hidden></div>
   <p id="empty-applied" class="empty" hidden>Nothing here yet. Tick “Applied” on a card and it’ll move into this tab.</p>
   <footer>Roles verified on YC on 2026-06-13. Links open each startup’s YC company page. Re-check listings before applying — startups close roles fast.</footer>
 </div>
@@ -177,7 +179,121 @@ const CURATED = [{
 }
 ];
 
-let JOBS = CURATED.slice();   // current list shown (curated by default, or résumé matches)
+/* Past batches proposed in earlier weeks. NOT shown in "To Apply", but any you
+   marked Applied still appear in the Applied tab (history is preserved). */
+const ARCHIVE = [
+{
+  id:"manufact",
+  name:"Manufact (formerly mcp-use)",
+  one:"Open-source SDK & cloud infrastructure for MCP servers & chat apps",
+  batch:"Summer 2025", team:5, loc:"SF / Remote (US)",
+  role:"Software Engineer (Founding Team) — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/manufact/jobs",
+  why:"Direct MCP match — you built Sentinel-ES on the MCP protocol for tool orchestration.",
+  msg:`Hi Manufact team,\n\nmcp-use caught my eye because I've already built on the MCP protocol. I made Sentinel-ES, a multi-agent incident-response system where an orchestrator coordinates three autonomous agents and uses MCP for tool orchestration, with human-in-the-loop rollback approval before anything destructive runs. So your bet on MCP as core infrastructure is one I'm genuinely excited about, not just familiar with.\n\nMy background fits a founding engineer role well. I work across Python, Go, and TypeScript, build FastAPI backends, and wrote a fault-tolerant distributed system in Go using Paxos and 2PC. I just finished my MS in CS at Stony Brook, and before that I interned at Amazon and spent two years at Enphase owning automation and infra end to end.\n\nI'd love to help build the open-source SDK and cloud platform, and I'm happy to walk you through the Sentinel-ES code.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"dedalus",
+  name:"Dedalus Labs",
+  one:"MCP gateway — a single drop-in API endpoint unifying the AI agent ecosystem",
+  batch:"Summer 2025", team:10, loc:"Remote / Any",
+  role:"Distributed Systems Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/dedalus-labs/jobs",
+  why:"Distributed systems + MCP — maps to your Go Paxos/2PC project and MCP work.",
+  msg:`Hi Dedalus team,\n\nA distributed systems role on an MCP gateway is almost exactly what I want to build. For a graduate project I implemented a fault-tolerant distributed banking system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions over net/rpc, with sharding, transaction locking, and failure recovery. I then benchmarked it across a 3,000-transaction workload and tuned the commit paths for better concurrency.\n\nI've also worked directly with MCP. My Sentinel-ES project uses the MCP protocol to orchestrate autonomous agents. Pair that with my backend work in FastAPI and AWS (Fargate, SQS, Kafka), and a single reliable drop-in endpoint for the agent ecosystem is the kind of problem I'd really enjoy owning.\n\nI just finished my MS in CS at Stony Brook, and previously worked at Amazon and Enphase.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"sixtyfour",
+  name:"Sixtyfour",
+  one:"Intelligence infrastructure on people and entities",
+  batch:"Spring 2025", team:12, loc:"SF / Remote (US)",
+  role:"AI Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/sixtyfour/jobs",
+  why:"Entity intelligence = your RAG + hybrid retrieval + LLM entity-extraction work.",
+  msg:`Hi Sixtyfour team,\n\nBuilding intelligence infrastructure over people and entities lines up closely with what I've been doing. I built a RAG pipeline with section-aware document chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking for grounded, source-attributed answers. I also built a NEMSIS pipeline that pulls structured entities out of messy EMS encounter data using LLM chains and emits schema-validated output.\n\nThat's exactly the shape of work entity enrichment needs: messy inputs in, structured and attributed intelligence out. I'm comfortable across Python, FastAPI, vector databases, and the major LLM APIs (Claude, OpenAI, Groq).\n\nI just finished my MS in CS at Stony Brook and interned at Amazon before that. I'd love to help build the AI layer here.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"browseruse",
+  name:"Browser Use",
+  one:"Leading open-source web agent (50k+ GitHub stars)",
+  batch:"Winter 2025", team:7, loc:"SF, CA",
+  role:"Software Engineer — 1+ years",
+  url:"https://www.ycombinator.com/companies/browser-use/jobs",
+  why:"Open-source web agents in Python — your multi-agent + Python wheelhouse.",
+  msg:`Hi Browser Use team,\n\nBrowser Use is the kind of project I'd use even if I didn't work there. It's a genuinely great open-source web agent, and I'd love to contribute to it full time.\n\nMy work centers on agentic systems in Python. I built Sentinel-ES, a multi-agent system with three parallel autonomous agents under an orchestrator that drives incident response end to end, with MCP-based tool orchestration and human-in-the-loop guardrails. I also have a strong testing and automation instinct from my Amazon internship, where I built a Cypress and TypeScript framework that hit 85% end-to-end coverage. That matters a lot for keeping a browser agent reliable across messy real-world sites.\n\nI just finished my MS in CS at Stony Brook, and I'd be glad to open a PR to introduce myself.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"osmosis",
+  name:"Osmosis",
+  one:"Reinforcement learning / fine-tuning for AI agents",
+  batch:"Winter 2025", team:6, loc:"SF, CA",
+  role:"Machine Learning Engineer — 1+ years",
+  url:"https://www.ycombinator.com/companies/osmosis/jobs",
+  why:"RL for agents — pairs your ML coursework with hands-on agentic systems.",
+  msg:`Hi Osmosis team,\n\nReinforcement fine-tuning for agents sits right where my coursework (Machine Learning and Recent Advances in AI/ML at Stony Brook) meets my hands-on agent work. I built Sentinel-ES, a multi-agent system where autonomous agents coordinate to resolve incidents, so I've seen firsthand the gap between a model that benchmarks well and one that actually acts reliably in a loop.\n\nOn the engineering side I'm solid in Python and FastAPI, work with LLM APIs daily, and have built RAG and data pipelines that feed model workflows end to end. I also care a lot about measurement. At Enphase I built observability pipelines (Datadog into SQL, visualized in Grafana) to catch regressions early.\n\nI just finished my MS in CS and interned at Amazon. I'm genuinely excited about RL for agents.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"luminal",
+  name:"Luminal",
+  one:"Making AI run fast on any hardware",
+  batch:"Summer 2025", team:5, loc:"SF, CA",
+  role:"Cloud Inference Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/luminal/jobs",
+  why:"Inference perf/infra — maps to your AWS Fargate + latency/throughput benchmarking.",
+  msg:`Hi Luminal team,\n\nMaking inference fast is really a performance and infrastructure problem, and that's where I'm strongest. At Enphase I built an observability pipeline that ingested Datadog APM metrics into SQL and visualized latency in Grafana, and I expanded JMeter load coverage by 70% across 300+ endpoints to catch performance regressions. In my distributed systems project I benchmarked a 3,000-transaction workload, found the bottlenecks, and tuned the commit paths for throughput.\n\nI'm comfortable deploying on AWS (Fargate, S3, SQS), Docker, and Kubernetes, and I code in C++, Python, and Go. I just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to go deep on cloud inference performance.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"agentmail",
+  name:"AgentMail",
+  one:"Email inboxes built for AI agents",
+  batch:"Summer 2025", team:8, loc:"SF, CA",
+  role:"Founding Engineer — Any (new grads ok)",
+  url:"https://www.ycombinator.com/companies/agentmail/jobs",
+  why:"Agent-facing backend infra — FastAPI + AWS SQS/Kafka + agents.",
+  msg:`Hi AgentMail team,\n\nInbox infrastructure for agents is a backend and messaging problem, and that's exactly the work I enjoy. At Enphase I worked with AWS CLI, Kafka, and MongoDB to inject and validate messages through an end-to-end ingestion pipeline, and I build APIs in FastAPI and Django on AWS (Fargate, S3, SQS). On the agent side, I built Sentinel-ES, a multi-agent system using the MCP protocol, so I understand how agents actually consume and act on tools and messages.\n\nThat combination of reliable message plumbing and real agent experience feels like a good fit for a founding engineer building the inbox layer agents depend on.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon. I'd love to build the early product with you.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"hyperspell",
+  name:"Hyperspell",
+  one:"Memory for AI agents",
+  batch:"Fall 2025", team:6, loc:"SF, CA",
+  role:"Founding AI Engineer — 3+ years (strong project fit)",
+  url:"https://www.ycombinator.com/companies/hyperspell/jobs",
+  why:"Memory = retrieval. Your RAG + hybrid retrieval + re-ranking work is the core of it.",
+  msg:`Hi Hyperspell team,\n\nMemory for agents is really a retrieval problem done well, and that's exactly what I've built. My RAG pipeline does section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers. Those are the same primitives a good agent-memory layer needs: relevant recall, ranking, and trustworthy provenance.\n\nI pair that with real agent experience (Sentinel-ES, a multi-agent system on the MCP protocol) and solid backend skills in Python and FastAPI on AWS. I know the role lists 3+ years. Between my Amazon internship, two years at Enphase, and these projects, I'd ask you to judge me on the retrieval systems I've actually shipped.\n\nI just finished my MS in CS at Stony Brook, and memory is the problem I most want to work on.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"pgdog",
+  name:"PgDog",
+  one:"Scaling engine for PostgreSQL (load balancing & sharding)",
+  batch:"Spring 2025", team:3, loc:"SF / Remote (US)",
+  role:"Founding Software Engineer — 3+ years (strong project fit)",
+  url:"https://www.ycombinator.com/companies/pgdog/jobs",
+  why:"Sharding + consistency — your Go Paxos/2PC sharded system is directly on-topic.",
+  msg:`Hi PgDog team,\n\nSharding and consistency in a database are the exact problems I dug into for my distributed systems project. I built a fault-tolerant, sharded system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions, with transaction locking and failure recovery to keep data consistent when nodes fail. I benchmarked it across a 3,000-transaction workload and tuned the commit paths for concurrency.\n\nThat's basically a small version of what PgDog does for Postgres at scale. I'm comfortable in Go, happy working low in the stack, and I care a lot about correctness under failure. I know the role says 3+ years, so I'd point to this project plus my Amazon and Enphase experience and let the work speak for itself.\n\nI just finished my MS in CS at Stony Brook.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"afterquery",
+  name:"AfterQuery",
+  one:"Applied research lab curating data solutions for foundation models",
+  batch:"Winter 2025", team:30, loc:"SF, CA",
+  role:"Software Engineer — Applied AI / Platform — 1+ years",
+  url:"https://www.ycombinator.com/companies/afterquery/jobs",
+  why:"Applied AI + data platform — your LLM data pipelines and eval mindset fit well.",
+  msg:`Hi AfterQuery team,\n\nCurating high-quality data for foundation models is applied AI engineering at its core, and it's the work I've gravitated toward. I built an LLM pipeline that extracts structured data from unstructured documents and audio (Whisper, then entity extraction, then schema-validated output), plus a RAG system with hybrid retrieval and re-ranking. So I've spent real time on data quality, grounding, and validation, not just model calls.\n\nI'm strong on the platform side too: FastAPI, AWS (Fargate, SQS, Kafka), Docker and Kubernetes, and an observability habit (Datadog into SQL, visualized in Grafana) for catching regressions early. That blend of applied AI and reliable platform engineering is what I'd bring.\n\nI just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+}
+];
+
+let currentList = CURATED.slice();   // drives the "To Apply" tab (curated week, or résumé matches)
+
+// Every company across all weeks, used to render the Applied tab.
+function registry(){
+  const m = {};
+  ARCHIVE.forEach(c => m[c.id] = c);
+  CURATED.forEach(c => m[c.id] = c);
+  currentList.forEach(c => m[c.id] = c);
+  return m;
+}
 
 const KEY = "yc_tracker_v1";
 // State is persisted to a JSON file on disk via the local server (/api/state).
@@ -196,72 +312,82 @@ function save(){
 
 const root = document.getElementById("cards");
 const appliedRoot = document.getElementById("applied-cards");
+const allRoot = document.getElementById("all-cards");
 let activeTab = "todo";
 
-// Put a card in the right column based on its applied state.
-function placeCard(id){
-  const card = document.getElementById("card-"+id);
-  if (!card) return;
-  const applied = !!(state[id] && state[id].applied);
-  (applied ? appliedRoot : root).appendChild(card);
+function esc(x){ return String(x==null?"":x).replace(/</g,"&lt;"); }
+function isApplied(id){ return !!(state[id] && state[id].applied); }
+
+function makeCard(j, idx){
+  const s = state[j.id] || {};
+  const card = document.createElement("div");
+  card.className = "card" + (s.applied ? " done" : "");
+  card.id = "card-" + j.id;
+  card.innerHTML = `
+    <div class="top">
+      <div>
+        <p class="name"><span class="num">${idx}.</span>${esc(j.name)}</p>
+        <p class="one">${esc(j.one)}</p>
+      </div>
+    </div>
+    <div class="tags">
+      <span class="tag">${esc(j.batch)}</span>
+      <span class="tag">Team ~${esc(j.team)}</span>
+      <span class="tag">${esc(j.loc)}</span>
+    </div>
+    <div class="role">${esc(j.role)}</div>
+    <div class="why"><b>Why you fit:</b> ${esc(j.why)}</div>
+    <div class="links"><a href="${esc(j.url)}" target="_blank" rel="noopener">Open role &amp; apply ↗</a></div>
+    <label class="msglbl">Personalized message (paste into the application)</label>
+    <textarea class="msg" id="msg-${j.id}" readonly>${esc(j.msg)}</textarea>
+    <button class="copy" data-id="${j.id}">Copy message</button>
+    <div class="track">
+      <label class="chk"><input type="checkbox" data-id="${j.id}" ${s.applied ? "checked":""}> Applied</label>
+      <div class="reason">
+        <label class="msglbl" style="margin-top:8px">If not applied — why? (notes save automatically)</label>
+        <textarea data-reason="${j.id}" placeholder="e.g. role closed, needs 3+ yrs, no sponsorship, not a fit...">${esc(s.reason||"")}</textarea>
+      </div>
+    </div>`;
+  return card;
 }
+
+// Render only the active tab (avoids duplicate element IDs across columns).
+function renderActive(){
+  root.innerHTML = ""; appliedRoot.innerHTML = ""; allRoot.innerHTML = "";
+  const reg = registry();
+  if (activeTab === "todo"){
+    let n = 0;
+    currentList.forEach(j => { if (!isApplied(j.id)) root.appendChild(makeCard(j, ++n)); });
+  } else if (activeTab === "applied"){
+    let m = 0;
+    Object.values(reg).filter(c => isApplied(c.id))
+      .sort((a,b) => a.name.localeCompare(b.name))
+      .forEach(c => appliedRoot.appendChild(makeCard(c, ++m)));
+  } else { // "all" — current batch first, then everything else, de-duped
+    const seen = new Set(); let k = 0;
+    const ordered = currentList.concat(Object.values(reg).filter(c => !currentList.some(x => x.id === c.id)));
+    ordered.forEach(c => { if (!seen.has(c.id)){ seen.add(c.id); allRoot.appendChild(makeCard(c, ++k)); } });
+  }
+  updateViews();
+}
+
+// Public entry: swap the current batch (curated week or résumé matches) and show To Apply.
+function renderJobs(list){ currentList = list; activeTab = "todo"; renderActive(); }
 
 function updateViews(){
-  const napplied = JOBS.filter(j => state[j.id] && state[j.id].applied).length;
-  const ntodo = JOBS.length - napplied;
+  const reg = registry();
+  const napplied = Object.values(reg).filter(c => isApplied(c.id)).length;
+  const ntodo = currentList.filter(j => !isApplied(j.id)).length;
   document.getElementById("napplied").textContent = napplied;
   document.getElementById("ntodo").textContent = ntodo;
+  document.getElementById("nall").textContent = Object.keys(reg).length;
   document.getElementById("cdone").textContent = napplied;
-  // toggle visible column
   root.hidden = activeTab !== "todo";
   appliedRoot.hidden = activeTab !== "applied";
-  // empty-state message for the applied tab
-  const emptyApplied = document.getElementById("empty-applied");
-  emptyApplied.hidden = !(activeTab === "applied" && napplied === 0);
+  allRoot.hidden = activeTab !== "all";
+  document.getElementById("empty-applied").hidden = !(activeTab === "applied" && napplied === 0);
   document.querySelectorAll(".tab").forEach(t =>
     t.classList.toggle("active", t.dataset.tab === activeTab));
-}
-
-function esc(x){ return String(x==null?"":x).replace(/</g,"&lt;"); }
-
-function renderJobs(list){
-  JOBS = list;
-  root.innerHTML = "";
-  appliedRoot.innerHTML = "";
-  list.forEach((j, i) => {
-    const s = state[j.id] || {};
-    const card = document.createElement("div");
-    card.className = "card" + (s.applied ? " done" : "");
-    card.id = "card-" + j.id;
-    card.innerHTML = `
-      <div class="top">
-        <div>
-          <p class="name"><span class="num">${i+1}.</span>${esc(j.name)}</p>
-          <p class="one">${esc(j.one)}</p>
-        </div>
-      </div>
-      <div class="tags">
-        <span class="tag">${esc(j.batch)}</span>
-        <span class="tag">Team ~${esc(j.team)}</span>
-        <span class="tag">${esc(j.loc)}</span>
-      </div>
-      <div class="role">${esc(j.role)}</div>
-      <div class="why"><b>Why you fit:</b> ${esc(j.why)}</div>
-      <div class="links"><a href="${esc(j.url)}" target="_blank" rel="noopener">Open role &amp; apply ↗</a></div>
-      <label class="msglbl">Personalized message (paste into the application)</label>
-      <textarea class="msg" id="msg-${j.id}" readonly>${esc(j.msg)}</textarea>
-      <button class="copy" data-id="${j.id}">Copy message</button>
-      <div class="track">
-        <label class="chk"><input type="checkbox" data-id="${j.id}" ${s.applied ? "checked":""}> Applied</label>
-        <div class="reason">
-          <label class="msglbl" style="margin-top:8px">If not applied — why? (notes save automatically)</label>
-          <textarea data-reason="${j.id}" placeholder="e.g. role closed, needs 3+ yrs, no sponsorship, not a fit...">${esc(s.reason||"")}</textarea>
-        </div>
-      </div>`;
-    root.appendChild(card);
-  });
-  list.forEach(j => placeCard(j.id));
-  updateViews();
 }
 
 document.addEventListener("change", e => {
@@ -269,9 +395,8 @@ document.addEventListener("change", e => {
     const id = e.target.dataset.id;
     state[id] = state[id] || {};
     state[id].applied = e.target.checked;
-    document.getElementById("card-"+id).classList.toggle("done", e.target.checked);
-    placeCard(id);
     save();
+    renderActive();   // re-render so the card moves between tabs
   }
 });
 document.addEventListener("input", e => {
@@ -292,16 +417,16 @@ document.addEventListener("click", e => {
     });
   } else if (e.target.matches('.tab')) {
     activeTab = e.target.dataset.tab;
-    updateViews();
+    renderActive();
   }
 });
 
-// Initial render of the curated set.
+// Initial render of the current batch.
 renderJobs(CURATED);
 
 // On load, pull the authoritative state from the on-disk ledger, then re-render.
 fetch("/api/state").then(r => r.ok ? r.json() : null).then(server => {
-  if (server) { state = server; localStorage.setItem(KEY, JSON.stringify(state)); renderJobs(JOBS); }
+  if (server) { state = server; localStorage.setItem(KEY, JSON.stringify(state)); renderActive(); }
 }).catch(() => {/* offline: keep localStorage state */});
 
 /* ====================================================================
