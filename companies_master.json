@@ -140,6 +140,76 @@
       "batch": "Summer 2025",
       "role": "Founding Member of Technical Staff",
       "proposed_on": "2026-06-16"
+    },
+    {
+      "slug": "salus",
+      "name": "Salus",
+      "batch": "Winter 2026",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "sourcebot",
+      "name": "Sourcebot",
+      "batch": "Fall 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "confident-ai",
+      "name": "Confident AI",
+      "batch": "Winter 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "moss",
+      "name": "Moss",
+      "batch": "Fall 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "blaxel",
+      "name": "Blaxel",
+      "batch": "Spring 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "hud",
+      "name": "HUD",
+      "batch": "Winter 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "truthsystems",
+      "name": "Truth Systems",
+      "batch": "Summer 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "leaping-ai",
+      "name": "Leaping AI",
+      "batch": "Winter 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "prox",
+      "name": "Prox",
+      "batch": "Fall 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "socratix-ai",
+      "name": "Socratix AI",
+      "batch": "Summer 2025",
+      "role": "Software Engineer",
+      "proposed_on": "2026-06-25"
     }
   ]
 }
