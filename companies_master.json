@@ -142,13 +142,6 @@
       "proposed_on": "2026-06-16"
     },
     {
-      "slug": "salus",
-      "name": "Salus",
-      "batch": "Winter 2026",
-      "role": "Founding Engineer",
-      "proposed_on": "2026-06-25"
-    },
-    {
       "slug": "sourcebot",
       "name": "Sourcebot",
       "batch": "Fall 2025",
@@ -184,20 +177,6 @@
       "proposed_on": "2026-06-25"
     },
     {
-      "slug": "truthsystems",
-      "name": "Truth Systems",
-      "batch": "Summer 2025",
-      "role": "Software Engineer",
-      "proposed_on": "2026-06-25"
-    },
-    {
-      "slug": "leaping-ai",
-      "name": "Leaping AI",
-      "batch": "Winter 2025",
-      "role": "Software Engineer",
-      "proposed_on": "2026-06-25"
-    },
-    {
       "slug": "prox",
       "name": "Prox",
       "batch": "Fall 2025",
@@ -205,10 +184,31 @@
       "proposed_on": "2026-06-25"
     },
     {
-      "slug": "socratix-ai",
-      "name": "Socratix AI",
+      "slug": "cua",
+      "name": "Cua",
+      "batch": "Spring 2025",
+      "role": "Founding Engineer, Infra & Agent Systems",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "traceroot-ai",
+      "name": "TraceRoot.AI",
       "batch": "Summer 2025",
-      "role": "Software Engineer",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "oximy",
+      "name": "Oximy",
+      "batch": "Winter 2026",
+      "role": "Founding Engineer",
+      "proposed_on": "2026-06-25"
+    },
+    {
+      "slug": "bluejay",
+      "name": "Bluejay",
+      "batch": "Spring 2025",
+      "role": "Founding Engineer",
       "proposed_on": "2026-06-25"
     }
   ]

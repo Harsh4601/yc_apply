@@ -64,104 +64,104 @@
 
 <script>
 const CURATED = [{
-  id:"salus",
-  name:"Salus",
-  one:"Guardrails to validate your agent's actions before they execute",
-  batch:"Winter 2026", team:2, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/salus/jobs",
-  why:"Inspecting an agent's action before it runs is the human-in-the-loop guardrail you built into Sentinel-ES.",
-  msg:`Hi Salus team,\n\nInspecting an agent's action before it executes is a problem I've already built for. In Sentinel-ES, my multi-agent incident-resolution system, an orchestrator coordinates autonomous agents over the MCP protocol, and I added human-in-the-loop approval before any destructive step \u2014 exactly the \"validate before it runs\" guardrail you're describing. The refund-without-an-order-ID failure mode is the kind of thing that layer exists to stop.\n\nI'm strong on the backend that has to sit in the hot path: Python, FastAPI, and Go on AWS with Docker, and I care about keeping the guardrail low-latency so it doesn't become the bottleneck. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nI'd love to help build the inspection layer here.\n\nBest,\nHarsh Londhekar`
-},
-{
   id:"sourcebot",
   name:"Sourcebot",
   one:"Helping humans and AI agents understand massive codebases",
   batch:"Fall 2025", team:3, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
+  role:"Founding Engineer",
   url:"https://www.ycombinator.com/companies/sourcebot/jobs",
   why:"Understanding (not writing) code at scale is a retrieval problem \u2014 your RAG + hybrid retrieval + re-ranking work is the core of it.",
   msg:`Hi Sourcebot team,\n\nMaking a massive codebase understandable to humans and agents is fundamentally a retrieval problem, and that's the work I've spent the most time on. I built a RAG pipeline with section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers. The same primitives \u2014 relevant recall, ranking, provenance \u2014 are what code understanding at scale needs.\n\nI also build the backend to support it: Python, FastAPI, Go, AWS, and Docker, and I enjoy working in open source. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"confident-ai",
-  name:"Confident AI",
-  one:"The LLM Eval and Observability Platform for AI Quality",
-  batch:"Winter 2025", team:7, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/confident-ai/jobs",
-  why:"LLM eval + observability is your sweet spot \u2014 you've shipped LLM data pipelines and built real observability with Datadog and Grafana.",
-  msg:`Hi Confident AI team,\n\nEval and observability for LLM apps sits right where my experience is. I built an LLM pipeline that extracts structured data from unstructured documents and audio (Whisper, then entity extraction, then schema-validated output), so I've spent real time on measuring output quality and grounding rather than just calling a model. On the observability side I built a pipeline that pushed metrics through Datadog into SQL and visualized them in Grafana to catch regressions early.\n\nThat combination \u2014 caring about AI quality and being able to build the platform that measures it (Python, FastAPI, AWS, Docker) \u2014 is what I'd bring. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 },
 {
   id:"moss",
   name:"Moss",
   one:"Real-time semantic search for Conversational AI",
   batch:"Fall 2025", team:5, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
+  role:"Software Engineer, Backend",
   url:"https://www.ycombinator.com/companies/moss/jobs",
   why:"Real-time semantic search is RAG with a latency budget \u2014 your hybrid retrieval + re-ranking, now tuned for sub-10ms.",
   msg:`Hi Moss team,\n\nA real-time semantic search runtime is the retrieval work I love, with a latency budget on top. I built a RAG system with section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking. Pushing that toward sub-10ms recall is exactly the kind of systems problem I enjoy \u2014 I also built a fault-tolerant sharded system in Go (Modified Paxos, Two-Phase Commit) and care a lot about performance under load.\n\nThat mix of retrieval quality and low-latency systems engineering (Python, Go, FastAPI, AWS) is what I'd contribute. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 },
 {
-  id:"blaxel",
-  name:"Blaxel",
-  one:"The perpetual sandbox platform for AI agents",
-  batch:"Spring 2025", team:8, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/blaxel/jobs",
-  why:"Sandbox infra with cold-start and memory-state challenges maps to your distributed-systems and backend-infra work.",
-  msg:`Hi Blaxel team,\n\nA sandbox platform that resumes in 25ms with full memory state is a systems problem I'd love to work on. I built a fault-tolerant, sharded system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions, with failure recovery and concurrency tuning \u2014 so I'm comfortable reasoning about state, recovery, and performance low in the stack. I've also run real infra: AWS (Fargate, SQS), Docker, and Kubernetes.\n\nI build agent systems too (Sentinel-ES on the MCP protocol), so I understand what the agents running in your sandboxes actually need. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+  id:"cua",
+  name:"Cua",
+  one:"Give every agent a cloud desktop",
+  batch:"Spring 2025", team:3, loc:"SF, CA",
+  role:"Founding Engineer, Infra & Agent Systems",
+  url:"https://www.ycombinator.com/companies/cua/jobs",
+  why:"A cloud-desktop runtime for agents is infra + agent systems \u2014 exactly your distributed-systems and MCP agent work.",
+  msg:`Hi Cua team,\n\nGiving every agent a cloud desktop is an infrastructure and agent-systems problem, which is the intersection I work at. I built Sentinel-ES, a multi-agent system where an orchestrator coordinates autonomous agents through MCP-based tool orchestration with human-in-the-loop guardrails, and a fault-tolerant sharded system in Go (Modified Paxos, Two-Phase Commit) with failure recovery \u2014 so I'm comfortable both with what agents need and with the low-level systems that run them.\n\nI've also run real infra: AWS (Fargate, SQS), Docker, and Kubernetes. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nI'd love to help build the agent runtime here.\n\nBest,\nHarsh Londhekar`
 },
 {
   id:"hud",
   name:"HUD",
   one:"Platform for building RL environments and evals",
   batch:"Winter 2025", team:15, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
+  role:"Research Engineer",
   url:"https://www.ycombinator.com/companies/hud/jobs",
   why:"Agentic evals for computer-use agents line up with your multi-agent + MCP tool-orchestration work.",
   msg:`Hi HUD team,\n\nEvals and RL environments for computer-use agents connect directly to what I've built. Sentinel-ES is a multi-agent system where an orchestrator coordinates autonomous agents through MCP-based tool orchestration, with human-in-the-loop guardrails \u2014 so I've dealt firsthand with the \"is this agent actually doing the right thing\" problem your eval framework targets.\n\nOn the engineering side I work in Python, FastAPI, and Go on AWS and Docker, and I built an LLM pipeline with schema-validated outputs, so I think about measuring correctness, not just running models. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 },
 {
-  id:"truthsystems",
-  name:"Truth Systems",
-  one:"Automatically blocking risky behavior with real-time governance agents",
-  batch:"Summer 2025", team:6, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/truthsystems/jobs",
-  why:"Real-time guardrails that block non-compliant agent actions are the human-in-the-loop layer you built into Sentinel-ES.",
-  msg:`Hi Truth Systems team,\n\nTranslating policy into real-time guardrails that block non-compliant AI actions is close to work I've already done. In Sentinel-ES, my multi-agent system on the MCP protocol, I added human-in-the-loop approval before destructive steps so an agent couldn't take a risky action unchecked \u2014 the same \"monitor every interaction and block the bad ones\" pattern you're building.\n\nI back that with backend depth: Python, FastAPI, Go, AWS, Docker, and an observability habit (Datadog into SQL, visualized in Grafana). I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+  id:"confident-ai",
+  name:"Confident AI",
+  one:"The LLM Eval and Observability Platform for AI Quality",
+  batch:"Winter 2025", team:7, loc:"SF, CA",
+  role:"Founding Product Engineer",
+  url:"https://www.ycombinator.com/companies/confident-ai/jobs",
+  why:"LLM eval + observability is your sweet spot \u2014 you've shipped LLM data pipelines and built real observability with Datadog and Grafana.",
+  msg:`Hi Confident AI team,\n\nEval and observability for LLM apps sits right where my experience is. I built an LLM pipeline that extracts structured data from unstructured documents and audio (Whisper, then entity extraction, then schema-validated output), so I've spent real time on measuring output quality and grounding rather than just calling a model. On the observability side I built a pipeline that pushed metrics through Datadog into SQL and visualized them in Grafana to catch regressions early.\n\nThat combination \u2014 caring about AI quality and being able to build the platform that measures it (Python, FastAPI, AWS, Docker) \u2014 is what I'd bring. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 },
 {
-  id:"leaping-ai",
-  name:"Leaping AI",
-  one:"AI voice and texting agents",
-  batch:"Winter 2025", team:11, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/leaping-ai/jobs",
-  why:"Voice agents need solid audio + agent plumbing \u2014 your Whisper pipeline and multi-agent work fit directly.",
-  msg:`Hi Leaping AI team,\n\nVoice and texting agents sit right at the intersection of two things I've built: audio pipelines and agent systems. I built an LLM pipeline that transcribes audio with Whisper and turns it into structured, schema-validated output, and a multi-agent system (Sentinel-ES) where an orchestrator coordinates autonomous agents over MCP with human-in-the-loop guardrails.\n\nFor production voice agents that have to be reliable, that combination \u2014 speech-to-structured-data plus orchestration \u2014 is what I'd bring, on a backend of Python, FastAPI, Go, and AWS. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+  id:"bluejay",
+  name:"Bluejay",
+  one:"Test, monitor, and improve your voice and chat AI agents",
+  batch:"Spring 2025", team:7, loc:"SF, CA",
+  role:"Founding Engineer",
+  url:"https://www.ycombinator.com/companies/bluejay/jobs",
+  why:"Testing and monitoring AI agents is the eval + observability work you've done \u2014 and your Whisper audio pipeline fits the voice side.",
+  msg:`Hi Bluejay team,\n\nTesting, monitoring, and improving voice and chat agents sits right where my experience is. I built an LLM pipeline that transcribes audio with Whisper and produces schema-validated structured output, so I've worked the voice side, and I built real observability (Datadog into SQL, visualized in Grafana) plus a multi-agent system (Sentinel-ES) with human-in-the-loop guardrails \u2014 so I think about measuring whether an agent is actually doing the right thing.\n\nThat blend of eval mindset and backend engineering (Python, FastAPI, Go, AWS, Docker) is what I'd bring. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"blaxel",
+  name:"Blaxel",
+  one:"The perpetual sandbox platform for AI agents",
+  batch:"Spring 2025", team:8, loc:"SF, CA",
+  role:"Site Reliability Engineer",
+  url:"https://www.ycombinator.com/companies/blaxel/jobs",
+  why:"Sandbox infra with cold-start and memory-state challenges maps to your distributed-systems and backend-infra work.",
+  msg:`Hi Blaxel team,\n\nA sandbox platform that resumes in 25ms with full memory state is a systems problem I'd love to work on. I built a fault-tolerant, sharded system in Go using Modified Paxos for consensus and Two-Phase Commit for cross-shard transactions, with failure recovery and concurrency tuning \u2014 so I'm comfortable reasoning about state, recovery, and performance low in the stack. I've also run real infra: AWS (Fargate, SQS), Docker, and Kubernetes.\n\nI build agent systems too (Sentinel-ES on the MCP protocol), so I understand what the agents running in your sandboxes actually need. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"traceroot-ai",
+  name:"TraceRoot.AI",
+  one:"Open source self-healing layer for AI agents",
+  batch:"Summer 2025", team:1, loc:"SF, CA",
+  role:"Founding Engineer",
+  url:"https://www.ycombinator.com/companies/traceroot-ai/jobs",
+  why:"A self-healing layer for agents is observability + orchestration \u2014 your Sentinel-ES guardrails and Datadog/Grafana work fit directly.",
+  msg:`Hi TraceRoot team,\n\nA self-healing layer for AI agents is an observability-meets-orchestration problem, and that's work I've done on both sides. I built Sentinel-ES, a multi-agent incident-resolution system where an orchestrator coordinates autonomous agents over MCP with human-in-the-loop guardrails \u2014 essentially automated detection and recovery for agent workflows. I also built real observability: metrics through Datadog into SQL, visualized in Grafana to catch regressions early.\n\nI like open source and moving fast on early systems. Backend-wise: Python, FastAPI, Go, AWS, Docker. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
+},
+{
+  id:"oximy",
+  name:"Oximy",
+  one:"See and control all AI activity across your enterprise",
+  batch:"Winter 2026", team:4, loc:"SF, CA",
+  role:"Founding Engineer",
+  url:"https://www.ycombinator.com/companies/oximy/jobs",
+  why:"Seeing and controlling AI activity is the guardrail + observability layer you built into Sentinel-ES.",
+  msg:`Hi Oximy team,\n\nGiving enterprises visibility and control over all AI activity is close to work I've already built. In Sentinel-ES, my multi-agent system on the MCP protocol, I added human-in-the-loop approval before any consequential action so agents couldn't act unchecked \u2014 the same \"see it and control it\" layer you're building. I pair that with real observability experience: metrics through Datadog into SQL, visualized in Grafana.\n\nOn the backend I work in Python, FastAPI, and Go on AWS and Docker. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 },
 {
   id:"prox",
   name:"Prox",
   one:"AI technical support for complex physical products",
   batch:"Fall 2025", team:7, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
+  role:"Founding Engineer",
   url:"https://www.ycombinator.com/companies/prox/jobs",
   why:"Technical support over dense product docs is RAG with strong grounding \u2014 your retrieval + LLM pipeline work.",
   msg:`Hi Prox team,\n\nAI support for complex physical products lives or dies on retrieving the right information from dense technical docs and grounding the answer, which is exactly my RAG work. I built a pipeline with section-aware chunking, vector embeddings in ChromaDB, and hybrid retrieval (semantic plus keyword) with re-ranking to return grounded, source-attributed answers \u2014 the difference between a confident wrong answer and a correct, cited one.\n\nI also built an LLM pipeline that extracts structured data from unstructured documents and audio, and I'm strong on the backend (Python, FastAPI, Go, AWS, Docker). I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
-},
-{
-  id:"socratix-ai",
-  name:"Socratix AI",
-  one:"AI coworkers for fraud and risk teams",
-  batch:"Summer 2025", team:4, loc:"SF, CA",
-  role:"View open roles on YC \u2197",
-  url:"https://www.ycombinator.com/companies/socratix-ai/jobs",
-  why:"AI coworkers that stitch context across tools is multi-agent orchestration \u2014 exactly your Sentinel-ES work.",
-  msg:`Hi Socratix team,\n\nBuilding AI coworkers that stitch context across tools and make judgment calls is a multi-agent orchestration problem, and that's what I built in Sentinel-ES: an orchestrator coordinating autonomous agents through MCP-based tool orchestration, with human-in-the-loop approval before consequential actions \u2014 important when the domain is fraud and risk.\n\nI also built an LLM pipeline that pulls structured data out of messy documents and audio, which is much of what a fraud analyst's context-gathering really is. Backend-wise: Python, FastAPI, Go, AWS, Docker. I just finished my MS in CS at Stony Brook and interned at Amazon.\n\nBest,\nHarsh Londhekar`
 }
 ];
 
